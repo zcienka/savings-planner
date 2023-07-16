@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "v6bWxa19/4sbFSf5lrR1tLOsPbUDr64wkKKZsFSEIbLAXOp82LTk2pzxBOF2qMLKe9MsSrGzPvWJ+nIIfIZzMA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zuzan\\source\\repos\\PersonalFinanceTracker\\PersonalFinanceTracker\\PersonalFinanceTracker.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zuzan\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512"
+  ],
+  "logs": []
+}
