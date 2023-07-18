@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "wwwroot/lib/custom.css",
+    "inputFile": "wwwroot/lib/custom.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/custom.css",
+    "inputFile": "wwwroot/css/custom.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/scss/style.css",
+    "inputFile": "wwwroot/lib/scss/style.scss"
+  }
+]

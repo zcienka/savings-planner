@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using PersonalFinanceTracker.Areas.Identity.Data;
 using PersonalFinanceTracker.Models;
 
-namespace PersonalFinanceTracker.Models
+namespace PersonalFinanceTracker.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<SampleUser>
     {
         public ApplicationDbContext(DbContextOptions options)
             : base(options)

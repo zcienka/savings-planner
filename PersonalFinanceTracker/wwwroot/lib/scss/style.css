@@ -1,0 +1,16 @@
+﻿body {
+  font-family: "Inter", sans-serif;
+}
+
+:root {
+  --container-color: #22262C;
+  --background-color: #1F2229;
+  --text-color: #ffd800ff;
+}
+
+body {
+  background: var(--background-color);
+}
+body .container {
+  background: red;
+}

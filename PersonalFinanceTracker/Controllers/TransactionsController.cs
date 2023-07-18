@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Controllers

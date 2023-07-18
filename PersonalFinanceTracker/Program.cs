@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using PersonalFinanceTracker.Areas.Identity.Data;
+using PersonalFinanceTracker.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +12,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<SampleDbContext>();
-
-builder.Services.AddDefaultIdentity<SampleUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<SampleDbContext>();
+builder.Services.AddDefaultIdentity<SampleUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 
