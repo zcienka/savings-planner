@@ -1,16 +1,43 @@
-﻿body {
-  font-family: "Inter", sans-serif;
+﻿main {
+  background-color: var(--main-color);
 }
 
 :root {
   --container-color: #22262C;
   --background-color: #1F2229;
-  --text-color: #ffd800ff;
+  --text-color: #e7e7e7;
+  --main-color: #343a40;
+}
+
+html, body {
+  height: 100%;
+  min-height: 100vh;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body .active {
+  background-color: var(--main-color) !important;
+}
+body main {
+  background-color: #212529 !important;
+}
+body .border-end {
+  border-right: 2px solid var(--main-color) !important;
+}
+
+.btn {
+  background-color: var(--main-color);
+  color: var(--text-color);
+}
+
+p {
+  color: var(--text-color);
 }
 
 body {
-  background: var(--background-color);
-}
-body .container {
-  background: red;
+  font-family: "Inter", sans-serif;
 }

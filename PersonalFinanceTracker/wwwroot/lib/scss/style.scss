@@ -1,7 +1,6 @@
-﻿@import 'globals';
-@import 'layout';
+﻿@import 'layout';
+@import 'globals';
 
 body {
-    background: var(--background-color);
-
+    font-family: $font;
 }
