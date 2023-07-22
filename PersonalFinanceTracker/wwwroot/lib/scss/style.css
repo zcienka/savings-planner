@@ -1,10 +1,5 @@
-﻿main {
-  background-color: var(--main-color);
-}
-
-:root {
+﻿:root {
   --container-color: #22262C;
-  --background-color: #1F2229;
   --text-color: #e7e7e7;
   --main-color: #343a40;
 }
@@ -23,18 +18,27 @@ body .active {
   background-color: var(--main-color) !important;
 }
 body main {
-  background-color: #212529 !important;
+  background-color: #212529;
 }
 body .border-end {
   border-right: 2px solid var(--main-color) !important;
 }
-
-.btn {
-  background-color: var(--main-color);
+body .border-bottom {
+  border-bottom: 2px solid var(--main-color) !important;
+}
+body .border {
+  border: 2px solid var(--main-color) !important;
+}
+body hr {
+  background-color: var(--main-color) !important;
+  opacity: 1;
+}
+body .btn {
+  background-color: var(--main-color) !important;
   color: var(--text-color);
 }
 
-p {
+p, a, a:hover, td {
   color: var(--text-color);
 }
 

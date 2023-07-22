@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
 namespace PersonalFinanceTracker.Areas.Identity.Data;
-
-// Add profile data for application users by adding properties to the SampleUser class
 public class SampleUser : IdentityUser
 {
 }

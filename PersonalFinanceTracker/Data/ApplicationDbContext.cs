@@ -5,8 +5,11 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<SampleUser>
+    public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext()
+        {
+        }
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
         {
