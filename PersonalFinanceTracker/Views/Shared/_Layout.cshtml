@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - PersonalFinanceTracker</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/lib/scss/style.css" asp-append-version="true"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,100 +12,96 @@
 </head>
 <body>
 <div class="d-flex flex-grow-1 flex-column" style="height: 100%">
-    <header>    
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow bg-dark">
-                <div class="container-fluid d-flex">
-                    <div class="d-flex flex-grow-1">
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PersonalFinanceTracker</a>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        @* <ul class="navbar-nav flex-grow-1"> *@
-                        @*     <li class="nav-item"> *@
-                        @*         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
-                        @*     </li> *@
-                        @*     <li class="nav-item"> *@
-                        @*         <a class="nav-link text-dark" asp-area="" asp-controller="Savings" asp-action="Index">Savings</a> *@
-                        @*     </li> *@
-                        @*     <li class="nav-item"> *@
-                        @*         <a class="nav-link text-dark" asp-area="" asp-controller="Transactions" asp-action="Index">Transactions</a> *@
-                        @*     </li> *@
-                        @* </ul> *@
-                        <div class="d-flex flex-grow-1 navbar">
-                            <form class="container-fluid justify-content-end">
-                                <button class="btn me-2" type="button">Login</button>
-                                <button class="btn me-2" type="button">Register</button>
-                            </form>
-                        </div>
-                    </div>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow bg-dark">
+            <div class="container-fluid d-flex">
+                <div class="d-flex flex-grow-1">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PersonalFinanceTracker</a>
                 </div>
-        </nav>
-    </header>
-    <div class="d-flex flex-grow-1 flex-column">
-            <div class="d-flex flex-grow-1">
-                <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark border-end" style="width: 280px;">
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active" aria-current="page">
-                            <svg class="bi me-2" width="16" height="16">
-                                <use xlink:href="#home"/>
-                            </svg>
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi me-2" width="16" height="16">
-                                <use xlink:href="#speedometer2"/>
-                            </svg>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi me-2" width="16" height="16">
-                                <use xlink:href="#table"/>
-                            </svg>
-                            Transactions
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi me-2" width="16" height="16">
-                                <use xlink:href="#grid"/>
-                            </svg>
-                            Savings
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi me-2" width="16" height="16">
-                                <use xlink:href="#people-circle"/>
-                            </svg>
-                            Settings
-                        </a>
-                    </li>
-                </ul>
-                <hr>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li>
-                            <a class="dropdown-item" href="#">Settings</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Profile</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Sign out</a>
-                        </li>
-                    </ul>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div class="d-flex flex-grow-1 navbar">
+                        @* <form class="container-fluid justify-content-end"> *@
+                        @*     <a class="btn me-2" asp-area="" asp-controller="Account" asp-action="Login">Login</a> *@
+                        @*     <a class="btn me-2" asp-area="" asp-controller="Account" asp-action="Register">Register</a> *@
+                        @* </form> *@
+                        @* @Html.Partial("_LoginPartial") *@
+                        <partial name="_LoginPartial"/>
+                    </div>
                 </div>
             </div>
+        </nav>
+    </header>
+
+    <div class="d-flex flex-grow-1 flex-column">
+
+        <div class="d-flex flex-grow-1">
+            @if (@ViewData["Title"].ToString() != "Log in" && @ViewData["Title"].ToString() != "Register")
+            {
+                <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark border-end" style="width: 280px;">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" aria-current="page">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#home"/>
+                                </svg>
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#speedometer2"/>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#table"/>
+                                </svg>
+                                Transactions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#grid"/>
+                                </svg>
+                                Savings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#people-circle"/>
+                                </svg>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                            <li>
+                                <a class="dropdown-item" href="#">Settings</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Profile</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Sign out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
             <main class="d-flex flex-grow-1">
                 @RenderBody()
             </main>

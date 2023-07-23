@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=IntegratedSecurity=true;Pooling=true;Server=db;Database=financetracker;Port=5432;User Id=postgres;Password=postgres
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
       - ASPNETCORE_URLS=http://+:80
     networks:
       - dev
