@@ -222,7 +222,7 @@ namespace PersonalFinanceTracker.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PersonalFinanceTracker.Models.Savings", b =>
+            modelBuilder.Entity("PersonalFinanceTracker.Models.Budget", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -246,13 +246,16 @@ namespace PersonalFinanceTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Savings");
+                    b.ToTable("BudgetContext");
                 });
 
             modelBuilder.Entity("PersonalFinanceTracker.Models.Transaction", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -262,6 +265,10 @@ namespace PersonalFinanceTracker.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 

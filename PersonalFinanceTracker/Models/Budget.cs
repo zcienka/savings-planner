@@ -1,6 +1,6 @@
 ﻿namespace PersonalFinanceTracker.Models
 {
-    public class Savings
+    public class Budget
     {
         public string Id { get; set; } = Guid.NewGuid().ToString("N");
         public string UserId { get; set; }

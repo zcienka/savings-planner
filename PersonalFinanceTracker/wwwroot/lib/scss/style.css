@@ -35,7 +35,32 @@ body hr {
 }
 body .btn {
   background-color: var(--main-color) !important;
-  color: var(--text-color);
+  color: var(--text-color) !important;
+}
+body table {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin-top: -10px;
+}
+body tr {
+  border-bottom-color: transparent;
+}
+body td {
+  background-color: var(--container-color) !important;
+}
+body td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+body td:last-child {
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+}
+body a {
+  text-decoration: none !important;
+}
+body .bg-secondary {
+  background-color: var(--main-color) !important;
 }
 
 p, a, a:hover, td, label, h2, h3 {

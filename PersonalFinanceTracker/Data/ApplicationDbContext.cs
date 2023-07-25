@@ -16,7 +16,7 @@ namespace PersonalFinanceTracker.Data
         }
 
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Savings> Savings { get; set; }
+        public DbSet<Budget> BudgetContext { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

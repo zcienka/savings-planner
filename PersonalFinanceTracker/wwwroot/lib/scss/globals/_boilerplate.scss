@@ -39,11 +39,38 @@ body {
 
     .btn {
         background-color: var(--main-color) !important;
-        color: var(--text-color);
+        color: var(--text-color) !important;
+    }
+
+    table {
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        margin-top: -10px;
+    }
+
+    tr {
+        border-bottom-color: transparent;
+    }
+
+    td {
+        background-color: var(--container-color) !important;
+    }
+
+    td:first-child {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+
+    td:last-child {
+        border-bottom-right-radius: 8px;
+        border-top-right-radius: 8px;
     }
 
     a {
         text-decoration: none !important;
     }
-}
 
+    .bg-secondary {
+        background-color: var(--main-color) !important;
+    }
+}

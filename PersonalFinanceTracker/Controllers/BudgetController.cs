@@ -2,33 +2,36 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
+using System.Linq;
 
 namespace PersonalFinanceTracker.Controllers
 {
-    public class SavingsController : Controller
+    public class BudgetController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SavingsController(ApplicationDbContext context)
+        public BudgetController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-              return _context.Savings != null ? 
-                          View(await _context.Savings.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Savings'  is null.");
+              return _context.BudgetContext != null ? 
+                          View(await _context.BudgetContext.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.BudgetContext'  is null.");
         }
+
+   
 
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Savings == null)
+            if (id == null || _context.BudgetContext == null)
             {
                 return NotFound();
             }
 
-            var savings = await _context.Savings
+            var savings = await _context.BudgetContext
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (savings == null)
             {
@@ -45,25 +48,25 @@ namespace PersonalFinanceTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Savings savings)
+        public async Task<IActionResult> Create([Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Budget budget)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(savings);
+                _context.Add(budget);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(savings);
+            return View(budget);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Savings == null)
+            if (id == null || _context.BudgetContext == null)
             {
                 return NotFound();
             }
 
-            var savings = await _context.Savings.FindAsync(id);
+            var savings = await _context.BudgetContext.FindAsync(id);
             if (savings == null)
             {
                 return NotFound();
@@ -73,9 +76,9 @@ namespace PersonalFinanceTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Savings savings)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Budget budget)
         {
-            if (id != savings.Id)
+            if (id != budget.Id)
             {
                 return NotFound();
             }
@@ -84,12 +87,12 @@ namespace PersonalFinanceTracker.Controllers
             {
                 try
                 {
-                    _context.Update(savings);
+                    _context.Update(budget);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SavingsExists(savings.Id))
+                    if (!SavingsExists(budget.Id))
                     {
                         return NotFound();
                     }
@@ -100,17 +103,17 @@ namespace PersonalFinanceTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(savings);
+            return View(budget);
         }
 
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Savings == null)
+            if (id == null || _context.BudgetContext == null)
             {
                 return NotFound();
             }
 
-            var savings = await _context.Savings
+            var savings = await _context.BudgetContext
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (savings == null)
             {
@@ -124,14 +127,14 @@ namespace PersonalFinanceTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Savings == null)
+            if (_context.BudgetContext == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Savings'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.BudgetContext'  is null.");
             }
-            var savings = await _context.Savings.FindAsync(id);
+            var savings = await _context.BudgetContext.FindAsync(id);
             if (savings != null)
             {
-                _context.Savings.Remove(savings);
+                _context.BudgetContext.Remove(savings);
             }
             
             await _context.SaveChangesAsync();
@@ -140,7 +143,7 @@ namespace PersonalFinanceTracker.Controllers
 
         private bool SavingsExists(string id)
         {
-          return (_context.Savings?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.BudgetContext?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

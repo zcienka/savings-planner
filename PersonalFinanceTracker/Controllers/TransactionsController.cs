@@ -21,6 +21,30 @@ namespace PersonalFinanceTracker.Controllers
                 : Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
         }
 
+
+
+        [HttpPost]
+        public IActionResult GetTransactionsData()
+        {
+            List<Transaction> transactions = _context.Transactions.ToList();
+
+            // var transactionCountPerDate = transactions.GroupBy(t => t.Date.Date)
+            //     .Select(group => new { Date = group.Key, Count = group.Count() })
+            //     .OrderBy(entry => entry.Date)
+            //     .ToList();
+
+            var dates = transactions.Select(entry => entry.Date.ToString("yyyy-MM-dd")).ToList();
+            // var counts = transactions.Select(entry => entry.).ToList();
+
+            var chartData = new
+            {
+                Dates = dates,
+                // Counts = counts
+            };
+
+            return Json(chartData); // Return the data as JSON
+        }
+
         public async Task<IActionResult> Details(string id)
         {
             if (id == null || _context.Transactions == null)

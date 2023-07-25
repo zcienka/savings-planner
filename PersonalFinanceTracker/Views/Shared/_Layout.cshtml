@@ -12,32 +12,29 @@
 </head>
 <body>
 <div class="d-flex flex-grow-1 flex-column" style="height: 100%">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow bg-dark">
-            <div class="container-fluid d-flex">
-                <div class="d-flex flex-grow-1">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PersonalFinanceTracker</a>
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div class="d-flex flex-grow-1 navbar">
-                        @* <form class="container-fluid justify-content-end"> *@
-                        @*     <a class="btn me-2" asp-area="" asp-controller="Account" asp-action="Login">Login</a> *@
-                        @*     <a class="btn me-2" asp-area="" asp-controller="Account" asp-action="Register">Register</a> *@
-                        @* </form> *@
-                        @* @Html.Partial("_LoginPartial") *@
-                        <partial name="_LoginPartial"/>
+    @if (@ViewData["Title"].ToString() != "Log in" && @ViewData["Title"].ToString() != "Register")
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow bg-dark">
+                <div class="container-fluid d-flex">
+                    <div class="d-flex flex-grow-1">
+                        <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">BudgetPlanner</a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <div class="d-flex flex-grow-1 w-100 justify-content-end">
+                            <partial name="_LoginPartial"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
+    }
 
     <div class="d-flex flex-grow-1 flex-column">
-
         <div class="d-flex flex-grow-1">
             @if (@ViewData["Title"].ToString() != "Log in" && @ViewData["Title"].ToString() != "Register")
             {
@@ -72,7 +69,7 @@
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#grid"/>
                                 </svg>
-                                Savings
+                                Budgets
                             </a>
                         </li>
                         <li>
@@ -102,14 +99,19 @@
                     </div>
                 </div>
             }
-            <main class="d-flex flex-grow-1">
+
+            <main class="d-flex flex-grow-1 p-4">
+                <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
                 @RenderBody()
             </main>
         </div>
     </div>
+
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
