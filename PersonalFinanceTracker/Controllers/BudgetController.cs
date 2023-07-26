@@ -22,7 +22,15 @@ namespace PersonalFinanceTracker.Controllers
                           Problem("Entity set 'ApplicationDbContext.BudgetContext'  is null.");
         }
 
-   
+        [HttpGet]
+        public IActionResult GetBudgetPlansPreview()
+        {
+            var transactions = _context.BudgetContext
+                .Take(10)
+                .ToList();
+
+            return Json(transactions);
+        }
 
         public async Task<IActionResult> Details(string id)
         {

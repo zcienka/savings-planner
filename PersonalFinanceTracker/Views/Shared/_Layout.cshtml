@@ -69,7 +69,7 @@
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#grid"/>
                                 </svg>
-                                Budgets
+                                Budget
                             </a>
                         </li>
                         <li>
@@ -101,10 +101,6 @@
             }
 
             <main class="d-flex flex-grow-1 p-4">
-                <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
                 @RenderBody()
             </main>
         </div>
@@ -114,6 +110,13 @@
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/Scripts/Plots/plots.js" asp-append-version="true"></script>
+<script src="~/Scripts/homePage.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

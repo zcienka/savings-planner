@@ -22,28 +22,97 @@ namespace PersonalFinanceTracker.Controllers
         }
 
 
-
-        [HttpPost]
+        [HttpGet]
         public IActionResult GetTransactionsData()
         {
             List<Transaction> transactions = _context.Transactions.ToList();
 
-            // var transactionCountPerDate = transactions.GroupBy(t => t.Date.Date)
-            //     .Select(group => new { Date = group.Key, Count = group.Count() })
-            //     .OrderBy(entry => entry.Date)
-            //     .ToList();
-
-            var dates = transactions.Select(entry => entry.Date.ToString("yyyy-MM-dd")).ToList();
-            // var counts = transactions.Select(entry => entry.).ToList();
+            var dates = transactions.Select(t => t.Date.ToString("yyyy-MM-dd")).ToList();
+            var amount = transactions.Select(t => t.Amount).ToList();
 
             var chartData = new
             {
                 Dates = dates,
-                // Counts = counts
+                Amount = amount
             };
 
-            return Json(chartData); // Return the data as JSON
+            return Json(chartData);
         }
+
+        [HttpGet]
+        public IActionResult GetExpenses()
+        {
+            List<Transaction> transactions = _context.Transactions.Where(t => t.Type == "Expense").ToList();
+
+            var dates = transactions
+                .Select(t => t.Date.ToString("yyyy-MM-dd"))
+                .ToList();
+            var amount = transactions
+                .Select(t => t.Amount)
+                .ToList();
+
+            var chartData = new
+            {
+                Dates = dates,
+                Amount = amount
+            };
+
+            return Json(chartData);
+        }
+
+        [HttpGet]
+        public IActionResult GetIncome()
+        {
+            List<Transaction> transactions = _context.Transactions
+                .Where(t => t.Type == "Income")
+                .ToList();
+
+            var dates = transactions
+                .Select(t => t.Date.ToString("yyyy-MM-dd"))
+                .ToList();
+            var income = transactions
+                .Select(t => t.Amount)
+                .ToList();
+
+            var chartData = new
+            {
+                Dates = dates,
+                Amount = income
+            };
+
+            return Json(chartData);
+        }
+
+        [HttpGet]
+        public IActionResult GetTransactionsByCategory()
+        {
+            var categories = _context.Transactions
+                .GroupBy(t => t.Category)
+                .Select(t => t.Key);
+
+            var amount = _context.Transactions
+                .GroupBy(t => t.Category)
+                .Select(t => t.Sum(t => t.Amount));
+
+            var chartData = new
+            {
+                Category = categories,
+                Amount = amount
+            };
+
+            return Json(chartData);
+        }
+
+        [HttpGet]
+        public IActionResult GetTransactionsPreview()
+        {
+            var transactions = _context.Transactions
+                .Take(10)
+                .ToList();
+
+            return Json(transactions);
+        }
+
 
         public async Task<IActionResult> Details(string id)
         {
