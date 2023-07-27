@@ -2,6 +2,7 @@
   --container-color: #22262C;
   --text-color: #e7e7e7;
   --main-color: #343a40;
+  --purple: #8C42C7 ;
 }
 
 html, body {
@@ -33,9 +34,9 @@ body hr {
   background-color: var(--main-color) !important;
   opacity: 1;
 }
-body .btn {
-  background-color: var(--main-color) !important;
-  color: var(--text-color) !important;
+body nav .btn {
+  background-color: var(--main-color);
+  color: var(--text-color);
 }
 body table {
   border-collapse: separate;
@@ -45,25 +46,19 @@ body table {
 body tr {
   border-bottom-color: transparent;
 }
-body td {
-  background-color: var(--container-color) !important;
-}
-body td:first-child {
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
-body td:last-child {
-  border-bottom-right-radius: 8px;
-  border-top-right-radius: 8px;
-}
 body a {
   text-decoration: none !important;
 }
 body .bg-secondary {
   background-color: var(--main-color) !important;
 }
+body .btn {
+  background-color: var(--purple);
+  border-radius: 4px;
+  color: var(--text-color);
+}
 
-p, a, a:hover, td, label, h2, h3 {
+p, a, a:hover, td, label, h2, h3, h4, h5, h6 {
   color: var(--text-color) !important;
 }
 

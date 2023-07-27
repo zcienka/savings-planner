@@ -37,9 +37,11 @@ body {
         opacity: 1;
     }
 
-    .btn {
-        background-color: var(--main-color) !important;
-        color: var(--text-color) !important;
+    nav {
+        .btn {
+            background-color: var(--main-color);
+            color: var(--text-color);
+        }
     }
 
     table {
@@ -52,25 +54,17 @@ body {
         border-bottom-color: transparent;
     }
 
-    td {
-        background-color: var(--container-color) !important;
-    }
-
-    td:first-child {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-    }
-
-    td:last-child {
-        border-bottom-right-radius: 8px;
-        border-top-right-radius: 8px;
-    }
-
     a {
         text-decoration: none !important;
     }
 
     .bg-secondary {
         background-color: var(--main-color) !important;
+    }
+
+    .btn {
+        background-color: var(--purple);
+        border-radius: 4px;
+        color: var(--text-color);
     }
 }

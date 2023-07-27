@@ -4,7 +4,6 @@
 <head>
     <title>@ViewData["Title"]</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/Scripts/Plots/plots.js"></script>
 </head>
 
 <script type="text/javascript">
@@ -14,77 +13,92 @@
             url: "Transactions/GetTransactionsData",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: OnSuccessResultBalance,
+            success: OnSuccessTransactions,
             error: OnError
         });
         $.ajax({
             type: "GET",
-            url: "Transactions/GetExpenses",
+            url: "Transactions/GetIncomeByCategory",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: OnSuccessResultExpenses,
+            success: OnSuccessResultIncomeCategory,
             error: OnError
         });
         $.ajax({
             type: "GET",
-            url: "Transactions/GetIncome",
+            url: "Transactions/GetExpensesByCategory",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: OnSuccessResultIncome,
+            success: OnSuccessResultExpensesCategory,
             error: OnError
         });
         $.ajax({
             type: "GET",
-            url: "Transactions/GetTransactionsByCategory",
+            url: "Transactions/GetMonthlyBalance", 
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: OnSuccessResultCategory,
+            success: function (data) {
+                $("#balanceAmount").text(data.balance);
+                $("#incomeAmount").text(data.income);
+                $("#expensesAmount").text(data.expenses);
+            },
             error: OnError
         });
-        $.ajax({
-            type: "GET",
-            url: "Transactions/GetTransactionsPreview",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: OnSuccessTransactionsPreview,
-            error: OnError
-        });
-        $.ajax({
-            type: "GET",
-            url: "Budget/GetBudgetPlansPreview",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: OnSuccessBudgetPlansPreview,
-            error: OnError
-        });
+
+        $(document).ready(function () {
+            var currentDate = new Date();
+            var currentMonthIndex = currentDate.getMonth();
+            var monthNames = [
+                "January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+            var currentMonthName = monthNames[currentMonthIndex];
+            $("#currentMonth").text(currentMonthName);
+        })
     })
 </script>
 
-<div class="w-100 bg-secondary p-4 rounded">
-    <div class="row">
-        <div class="w-50">
-            <canvas id="balanceChart"></canvas>
+<div class="w-100">
+    <div class="d-flex flex-row flex-grow-1">
+        <div class="d-flex flex-column w-25">
+            <div class="bg-secondary p-2 rounded-2 my-2">
+                <h3 class="fw-bold" id="currentMonth"></h3>
+            </div>
+
+            <div class="bg-secondary p-2 rounded-2 my-2">
+                <h4>Balance</h4>
+                <h3 class="fw-bold"  id="balanceAmount"></h3>
+            </div>
+            <div class="bg-secondary p-2 rounded-2 my-2 ">
+                <h4>Income</h4>
+                <h3 class="fw-bold" id="incomeAmount"></h3>
+            </div>
+            <div class="bg-secondary p-2 rounded-2 my-2 fw-bold">
+                <h4>Expenses</h4>
+                <h3 class="fw-bold" id="expensesAmount"></h3>
+            </div>
         </div>
 
-        <div class="w-50">
-            <canvas id="expensesChart"></canvas>
+        <div class="d-flex flex-row w-75">
+            <canvas id="transactionsChart"></canvas>
         </div>
     </div>
 
-    <div class="row">
+
+    <div class="d-flex flex-row flex-grow-1">
         <div class="w-50">
-            <canvas id="incomeChart"></canvas>
+            <h4>Expenses</h4>
+            <div class="d-flex align-items-center">
+                <canvas id="expensesCategoryChart"></canvas>
+            </div>
         </div>
 
         <div class="w-50">
-            <canvas id="categoryChart"></canvas>
+            <h4>Income</h4>
+            <div>
+                <canvas id="incomeCategoryChart"></canvas>
+            </div>
         </div>
     </div>
-
-    <table id="transactionsTable" class="table">
-    </table>
-
-
-    <table id="budgetPlansTable" class="table">
-    </table>
 </div>

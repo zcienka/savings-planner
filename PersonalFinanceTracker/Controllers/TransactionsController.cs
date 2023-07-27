@@ -21,76 +21,37 @@ namespace PersonalFinanceTracker.Controllers
                 : Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
         }
 
-
         [HttpGet]
         public IActionResult GetTransactionsData()
         {
-            List<Transaction> transactions = _context.Transactions.ToList();
-
-            var dates = transactions.Select(t => t.Date.ToString("yyyy-MM-dd")).ToList();
-            var amount = transactions.Select(t => t.Amount).ToList();
-
-            var chartData = new
-            {
-                Dates = dates,
-                Amount = amount
-            };
-
-            return Json(chartData);
+            var chartData = _context.Transactions
+                .GroupBy(t => new { Month = t.Date.Month, Year = t.Date.Year })
+                .Select(group => new
+                {
+                    Month = group.Key.Month,
+                    Year = group.Key.Year,
+                    Income = group.Where(t => t.Type == "Income").Sum(t => t.Amount),
+                    Expenses = group.Where(t => t.Type == "Expense").Sum(t => t.Amount)
+                })
+                .OrderBy(group => group.Year)
+                .ThenBy(group => group.Month)
+                .ToList();
+     
+            return Json(chartData); 
         }
 
         [HttpGet]
-        public IActionResult GetExpenses()
+        public IActionResult GetIncomeByCategory()
         {
-            List<Transaction> transactions = _context.Transactions.Where(t => t.Type == "Expense").ToList();
+            DateTimeOffset currentDate = DateTimeOffset.Now;
 
-            var dates = transactions
-                .Select(t => t.Date.ToString("yyyy-MM-dd"))
-                .ToList();
-            var amount = transactions
-                .Select(t => t.Amount)
-                .ToList();
-
-            var chartData = new
-            {
-                Dates = dates,
-                Amount = amount
-            };
-
-            return Json(chartData);
-        }
-
-        [HttpGet]
-        public IActionResult GetIncome()
-        {
-            List<Transaction> transactions = _context.Transactions
-                .Where(t => t.Type == "Income")
-                .ToList();
-
-            var dates = transactions
-                .Select(t => t.Date.ToString("yyyy-MM-dd"))
-                .ToList();
-            var income = transactions
-                .Select(t => t.Amount)
-                .ToList();
-
-            var chartData = new
-            {
-                Dates = dates,
-                Amount = income
-            };
-
-            return Json(chartData);
-        }
-
-        [HttpGet]
-        public IActionResult GetTransactionsByCategory()
-        {
             var categories = _context.Transactions
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Income")
                 .GroupBy(t => t.Category)
                 .Select(t => t.Key);
 
             var amount = _context.Transactions
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Income")
                 .GroupBy(t => t.Category)
                 .Select(t => t.Sum(t => t.Amount));
 
@@ -104,15 +65,49 @@ namespace PersonalFinanceTracker.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTransactionsPreview()
+        public IActionResult GetExpensesByCategory()
         {
-            var transactions = _context.Transactions
-                .Take(10)
-                .ToList();
+            DateTimeOffset currentDate = DateTimeOffset.Now;
 
-            return Json(transactions);
+            var categories = _context.Transactions
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Expense")
+                .GroupBy(t => t.Category)
+                .Select(t => t.Key);
+
+            var amount = _context.Transactions
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Expense")
+                .GroupBy(t => t.Category)
+                .Select(t => t.Sum(t => t.Amount));
+
+            var chartData = new
+            {
+                Category = categories,
+                Amount = amount
+            };
+
+            return Json(chartData);
         }
 
+        [HttpGet]
+        public IActionResult GetMonthlyBalance()
+        {
+            DateTimeOffset currentDate = DateTimeOffset.Now;
+            var expenses = _context.Transactions
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Expense")
+                .Sum(t => t.Amount);
+
+            var income = _context.Transactions
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Income")
+                .ToList()
+                .Sum(t => t.Amount);
+
+            return Json(new
+            {
+                Balance = expenses + income,
+                Income = income,
+                Expenses = expenses,
+            });
+        }
 
         public async Task<IActionResult> Details(string id)
         {
