@@ -19,16 +19,14 @@
             datasets: [{
                 label: 'Income',
                 data: income,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: '#B7C9DB',
                 borderWidth: 1,
                 fill: true
             },
             {
                 label: 'Expenses',
                 data: expenses,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: '#7F9BAE',
                 borderWidth: 1,
                 fill: true
             }]

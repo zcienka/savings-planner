@@ -76,6 +76,16 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
+            [StringLength(100, ErrorMessage="First name can have a maximum of 100 characters")]
+            [Display(Name = "First name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "Last name can have a maximum of 100 characters")]
+            [Display(Name = "Last name")]
+            public string LastName { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
