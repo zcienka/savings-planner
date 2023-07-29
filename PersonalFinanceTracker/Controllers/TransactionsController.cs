@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Controllers
 {
+    // [Authorize]
     public class TransactionsController : Controller
     {
         private readonly ApplicationDbContext _context;

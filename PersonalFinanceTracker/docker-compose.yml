@@ -18,6 +18,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
       - ASPNETCORE_URLS=http://+:80
+      - SendGridKey=${GRID_KEY}
     networks:
       - dev
   db:
@@ -34,6 +35,5 @@ services:
         - app_data:/var/lib/postgresql/data
     networks:
       - dev
-
-volumes:    
+volumes:
   app_data:

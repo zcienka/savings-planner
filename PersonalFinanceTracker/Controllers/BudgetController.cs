@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalFinanceTracker.Controllers
 {
+    // [Authorize]
     public class BudgetController : Controller
     {
         private readonly ApplicationDbContext _context;

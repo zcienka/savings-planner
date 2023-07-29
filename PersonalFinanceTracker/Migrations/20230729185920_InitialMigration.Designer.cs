@@ -12,7 +12,7 @@ using PersonalFinanceTracker.Data;
 namespace PersonalFinanceTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230725212049_InitialMigration")]
+    [Migration("20230729185920_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -179,6 +179,14 @@ namespace PersonalFinanceTracker.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");

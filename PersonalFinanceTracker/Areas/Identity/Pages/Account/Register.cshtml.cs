@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using PersonalFinanceTracker.Areas.Identity.Data;
@@ -30,13 +32,15 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<SampleUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<SampleUser> userManager,
             IUserStore<SampleUser> userStore,
             SignInManager<SampleUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +48,7 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -77,12 +82,12 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [StringLength(100, ErrorMessage="First name can have a maximum of 100 characters")]
-            [Display(Name = "First name")]
+            [Display(Name = "FirstName")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "Last name can have a maximum of 100 characters")]
-            [Display(Name = "Last name")]
+            [Display(Name = "LastName")]
             public string LastName { get; set; }
 
             [Required]
@@ -108,6 +113,11 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            // [Required]
+            // public string? Role { get; set; }
+            // [ValidateNever]
+            // public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
 
@@ -129,9 +139,14 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

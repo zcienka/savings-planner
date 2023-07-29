@@ -1,10 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using PersonalFinanceTracker.Areas.Identity.Data;
+using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using PersonalFinanceTracker.Services;
-using PersonalFinanceTracker.TokenProviders;
+using PersonalFinanceTracker.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,28 +12,10 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddTransient<IEmailSender, EmailSender>();
-builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
-
-builder.Services.AddDefaultIdentity<IdentityUser>(config =>
-{
-    config.SignIn.RequireConfirmedEmail = true;
-    config.Tokens.ProviderMap.Add("CustomEmailConfirmation",
-        new TokenProviderDescriptor(
-            typeof(CustomEmailConfirmationTokenProvider<IdentityUser>)));
-    config.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
-}).AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.AddTransient<CustomEmailConfirmationTokenProvider<IdentityUser>>();
-
-builder.Services.ConfigureApplicationCookie(o => {
-    o.ExpireTimeSpan = TimeSpan.FromDays(5);
-    o.SlidingExpiration = true;
-});
-
-builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
-    o.TokenLifespan = TimeSpan.FromHours(3));
+builder.Services.AddDefaultIdentity<SampleUser>()
+    .AddRoles<IdentityRole>()
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 

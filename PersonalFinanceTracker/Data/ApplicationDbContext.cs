@@ -9,9 +9,6 @@ namespace PersonalFinanceTracker.Data
 {
     public class ApplicationDbContext : IdentityDbContext<SampleUser>
     {
-        public ApplicationDbContext()
-        {
-        }
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
         {
@@ -20,6 +17,7 @@ namespace PersonalFinanceTracker.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Budget> BudgetContext { get; set; }
         public DbSet<SampleUser> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,7 +32,7 @@ public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<Sampl
 {
     public void Configure(EntityTypeBuilder<SampleUser> builder)
     {
-        builder.Property(x => x.FirstName).HasMaxLength(100);
-        builder.Property(x => x.LastName).HasMaxLength(100);
+        builder.Property(u => u.FirstName).HasMaxLength(100);
+        builder.Property(u => u.LastName).HasMaxLength(100);
     }
 }
