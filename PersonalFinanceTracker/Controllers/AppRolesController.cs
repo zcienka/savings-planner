@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PersonalFinanceTracker.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class AppRolesController : Controller
     {
         private RoleManager<IdentityRole> _roleManager;

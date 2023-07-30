@@ -1,61 +1,41 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PersonalFinanceTracker.Data;
+using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Controllers
 {
-    // [Authorize]
     public class TransactionsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public TransactionsController(ApplicationDbContext context)
+        public TransactionsController(ITransactionRepository transactionRepository)
         {
-            _context = context;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<IActionResult> Index()
         {
-            return _context.Transactions != null
-                ? View(await _context.Transactions.ToListAsync())
-                : Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
+            IEnumerable<Transaction> transaction = await _transactionRepository.GetAll();
+
+            return View(transaction);
         }
 
         [HttpGet]
         public IActionResult GetTransactionsData()
         {
-            var chartData = _context.Transactions
-                .GroupBy(t => new { Month = t.Date.Month, Year = t.Date.Year })
-                .Select(group => new
-                {
-                    Month = group.Key.Month,
-                    Year = group.Key.Year,
-                    Income = group.Where(t => t.Type == "Income").Sum(t => t.Amount),
-                    Expenses = group.Where(t => t.Type == "Expense").Sum(t => t.Amount)
-                })
-                .OrderBy(group => group.Year)
-                .ThenBy(group => group.Month)
-                .ToList();
-     
+            var chartData = _transactionRepository.GetIncomeAndExpenses();
+
             return Json(chartData); 
         }
 
         [HttpGet]
         public IActionResult GetIncomeByCategory()
         {
-            DateTimeOffset currentDate = DateTimeOffset.Now;
+            var categories = _transactionRepository.GetCategoriesByCurrentMonth("Income");
 
-            var categories = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Income")
-                .GroupBy(t => t.Category)
-                .Select(t => t.Key);
-
-            var amount = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Income")
-                .GroupBy(t => t.Category)
-                .Select(t => t.Sum(t => t.Amount));
+            var amount = _transactionRepository.GetTransactionListByCurrentMonth("Income");
 
             var chartData = new
             {
@@ -69,17 +49,9 @@ namespace PersonalFinanceTracker.Controllers
         [HttpGet]
         public IActionResult GetExpensesByCategory()
         {
-            DateTimeOffset currentDate = DateTimeOffset.Now;
+            var categories = _transactionRepository.GetCategoriesByCurrentMonth("Expense");
 
-            var categories = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Expense")
-                .GroupBy(t => t.Category)
-                .Select(t => t.Key);
-
-            var amount = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Expense")
-                .GroupBy(t => t.Category)
-                .Select(t => t.Sum(t => t.Amount));
+            var amount = _transactionRepository.GetTransactionListByCurrentMonth("Expense");
 
             var chartData = new
             {
@@ -93,15 +65,9 @@ namespace PersonalFinanceTracker.Controllers
         [HttpGet]
         public IActionResult GetMonthlyBalance()
         {
-            DateTimeOffset currentDate = DateTimeOffset.Now;
-            var expenses = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Expense")
-                .Sum(t => t.Amount);
+            var expenses = _transactionRepository.GetSumByCurrentMonth("Expense");
 
-            var income = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == "Income")
-                .ToList()
-                .Sum(t => t.Amount);
+            var income = _transactionRepository.GetSumByCurrentMonth("Income");
 
             return Json(new
             {
@@ -113,13 +79,8 @@ namespace PersonalFinanceTracker.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
+            var transaction = await _transactionRepository.GetByIdAsync(id);
 
-            var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -135,12 +96,11 @@ namespace PersonalFinanceTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,Category,Date,Description")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("Id,UserId,Category,Date,Description,Type,Amount")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(transaction);
-                await _context.SaveChangesAsync();
+                _transactionRepository.Add(transaction);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -149,12 +109,8 @@ namespace PersonalFinanceTracker.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
+            var transaction = await _transactionRepository.GetByIdAsync(id);
 
-            var transaction = await _context.Transactions.FindAsync(id);
             if (transaction == null)
             {
                 return NotFound();
@@ -166,7 +122,7 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id,
-            [Bind("Id,UserId,Category,Date,Description")]
+            [Bind("Id,UserId,Category,Date,Description,Type,Amount")]
             Transaction transaction)
         {
             if (id != transaction.Id)
@@ -174,40 +130,30 @@ namespace PersonalFinanceTracker.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(transaction);
+            try
             {
-                try
+                _transactionRepository.Update(transaction);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TransactionExists(transaction.Id))
                 {
-                    _context.Update(transaction);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!TransactionExists(transaction.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-
-                return RedirectToAction(nameof(Index));
             }
 
-            return View(transaction);
+            return RedirectToAction(nameof(Index));
+
         }
 
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
-
-            var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var transaction = await _transactionRepository.GetByIdAsync(id);
             if (transaction == null)
             {
                 return NotFound();
@@ -220,24 +166,18 @@ namespace PersonalFinanceTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Transactions == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
-            }
-
-            var transaction = await _context.Transactions.FindAsync(id);
+            var transaction = await _transactionRepository.GetByIdAsync(id);
             if (transaction != null)
             {
-                _context.Transactions.Remove(transaction);
+                _transactionRepository.Delete(transaction);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TransactionExists(string id)
         {
-            return (_context.Transactions?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _transactionRepository.Exists(id);
         }
     }
 }
