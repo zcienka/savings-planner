@@ -1,31 +1,55 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalFinanceTracker.Controllers
 {
+    [Authorize]
     public class TransactionsController : Controller
     {
         private readonly ITransactionRepository _transactionRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionsController(ITransactionRepository transactionRepository)
+        public TransactionsController(ITransactionRepository transactionRepository, IHttpContextAccessor httpContextAccessor)
         {
             _transactionRepository = transactionRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg=1)
         {
-            IEnumerable<Transaction> transaction = await _transactionRepository.GetAll();
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            IEnumerable<Transaction> transactions = await _transactionRepository.GetAllByUserId(currUserId);
 
-            return View(transaction);
+            const int pageSize = 20;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int recsCount = transactions.Count();
+
+            var pager = new Pager(recsCount, pg, pageSize); 
+
+            int recSkip = (pg - 1) * pageSize;
+            var data = transactions
+                .Skip(recSkip)
+                .Take(pager.PageSize)   
+                .ToList();
+            this.ViewBag.Pager = pager;
+            
+            return View(data);
         }
 
         [HttpGet]
         public IActionResult GetTransactionsData()
         {
-            var chartData = _transactionRepository.GetIncomeAndExpenses();
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+
+            var chartData = _transactionRepository.GetIncomeAndExpensesPast12Months(currUserId);
 
             return Json(chartData); 
         }
@@ -33,9 +57,11 @@ namespace PersonalFinanceTracker.Controllers
         [HttpGet]
         public IActionResult GetIncomeByCategory()
         {
-            var categories = _transactionRepository.GetCategoriesByCurrentMonth("Income");
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            var amount = _transactionRepository.GetTransactionListByCurrentMonth("Income");
+            var categories = _transactionRepository.GetCategoriesByCurrentMonth("Income", currUserId);
+
+            var amount = _transactionRepository.GetTransactionListByCurrentMonth("Income", currUserId);
 
             var chartData = new
             {
@@ -49,9 +75,11 @@ namespace PersonalFinanceTracker.Controllers
         [HttpGet]
         public IActionResult GetExpensesByCategory()
         {
-            var categories = _transactionRepository.GetCategoriesByCurrentMonth("Expense");
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            var amount = _transactionRepository.GetTransactionListByCurrentMonth("Expense");
+            var categories = _transactionRepository.GetCategoriesByCurrentMonth("Expense", currUserId);
+
+            var amount = _transactionRepository.GetTransactionListByCurrentMonth("Expense", currUserId);
 
             var chartData = new
             {
@@ -65,13 +93,15 @@ namespace PersonalFinanceTracker.Controllers
         [HttpGet]
         public IActionResult GetMonthlyBalance()
         {
-            var expenses = _transactionRepository.GetSumByCurrentMonth("Expense");
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            var income = _transactionRepository.GetSumByCurrentMonth("Income");
+            var expenses = _transactionRepository.GetSumByCurrentMonth("Expense", currUserId);
+
+            var income = _transactionRepository.GetSumByCurrentMonth("Income", currUserId);
 
             return Json(new
             {
-                Balance = expenses + income,
+                Balance = expenses - income,
                 Income = income,
                 Expenses = expenses,
             });

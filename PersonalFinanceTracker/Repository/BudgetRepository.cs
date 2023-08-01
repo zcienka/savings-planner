@@ -25,9 +25,9 @@ namespace PersonalFinanceTracker.Repository
             return Save();
         }
 
-        public async Task<IEnumerable<Budget>> GetAll()
+        public async Task<IEnumerable<Budget>> GetAll(string userId)
         {
-            return await _context.BudgetContext.ToListAsync();
+            return await _context.BudgetContext.Where(b=> b.UserId == userId).ToListAsync();
         }
 
         public async Task<Budget> GetByIdAsync(string id)

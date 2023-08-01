@@ -9,6 +9,7 @@ services:
     depends_on:
       - "db"
     image: personalfinancetracker
+    command: ["seeddata"]
     ports:
       - "32768:80"
     container_name: personalfinancetracker

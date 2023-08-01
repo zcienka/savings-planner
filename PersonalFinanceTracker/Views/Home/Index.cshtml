@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PersonalFinanceTracker.Areas.Identity.Data
+
+@inject UserManager<SampleUser> UserManager
+@{
     ViewData["Title"] = "Home Page";
 }
 <head>
@@ -63,6 +68,9 @@
 <div class="w-100">
     <div class="d-flex flex-row flex-grow-1">
         <div class="d-flex flex-column w-25">
+            <div>
+                <h3>Hello @UserManager.GetUserName(User)</h3>
+            </div>
             <div class="bg-secondary p-4 rounded-2 my-2">
                 <h3 class="fw-bold" id="currentMonth"></h3>
             </div>
@@ -85,7 +93,6 @@
             <canvas id="transactionsChart"></canvas>
         </div>
     </div>
-    // todo dodanie savingsow i hello
 
     <div class="row">
         <div class="col-md-6">

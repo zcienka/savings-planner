@@ -44,13 +44,16 @@ body {
         }
     }
 
-    table {
-        border-collapse: separate;
-        border-spacing: 0 8px;
-        margin-top: -10px;
+    tr {
+        border-bottom-color: transparent;
     }
 
-    tr {
+    th {
+        color: var(--text-color);
+    }
+
+    .table tr, .table td, .table th {
+        border: 0 !important;
         border-bottom-color: transparent;
     }
 
@@ -62,9 +65,25 @@ body {
         background-color: var(--main-color) !important;
     }
 
-    .btn {
-        background-color: var(--purple);
+    .btn, btn:hover {
+        background-color: var(--main-color);
         border-radius: 4px;
         color: var(--text-color);
+    }
+
+    @media screen and (min-width: 769px) {
+        .container {
+            max-width: 1700px;
+        }
+    }
+
+    .page-link {
+        a {
+            color: var(--text-color);
+        }
+
+        .active {
+            background-color: var(--main-color);
+        }
     }
 }

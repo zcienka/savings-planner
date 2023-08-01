@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalFinanceTracker.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,7 +20,6 @@ namespace PersonalFinanceTracker.Controllers
         {
             return View();
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

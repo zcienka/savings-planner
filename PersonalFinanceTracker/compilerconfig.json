@@ -10,5 +10,13 @@
   {
     "outputFile": "wwwroot/lib/scss/style.css",
     "inputFile": "wwwroot/lib/scss/style.scss"
+  },
+  {
+    "outputFile": "wwwroot/Scripts/homePage.es5.js",
+    "inputFile": "wwwroot/Scripts/homePage.js"
+  },
+  {
+    "outputFile": "wwwroot/lib/scss/globals/_typography.css",
+    "inputFile": "wwwroot/lib/scss/globals/_typography.scss"
   }
 ]

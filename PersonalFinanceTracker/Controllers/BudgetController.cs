@@ -8,18 +8,40 @@ using PersonalFinanceTracker.Interfaces;
 
 namespace PersonalFinanceTracker.Controllers
 {
+    [Authorize]
     public class BudgetController : Controller
     {
         private readonly IBudgetRepository _budgetRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BudgetController(IBudgetRepository budgetRepository)
+        public BudgetController(IBudgetRepository budgetRepository, IHttpContextAccessor httpContextAccessor)
         {
             _budgetRepository = budgetRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
-            IEnumerable<Budget> budget = await _budgetRepository.GetAll();
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+
+            IEnumerable<Budget> budget = await _budgetRepository.GetAll(currUserId);
+
+            const int pageSize = 20;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int recsCount = budget.Count();
+
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+            var data = budget
+                .Skip(recSkip)
+                .Take(pager.PageSize)
+                .ToList();
+            this.ViewBag.Pager = pager;
 
             return View(budget);
         }

@@ -4,7 +4,7 @@ namespace PersonalFinanceTracker.Interfaces
 {
     public interface IBudgetRepository
     {
-        Task<IEnumerable<Budget>> GetAll();
+        Task<IEnumerable<Budget>> GetAll(string userId);
         Task<Budget> GetByIdAsync(string id);
         bool Add(Budget budget);
         bool Update(Budget budget);
