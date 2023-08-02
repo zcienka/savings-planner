@@ -39,7 +39,7 @@
         <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="cursor-pointer" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                 <td>
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>
@@ -55,11 +55,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <a asp-action="Delete" asp-route-id="@item.Id"><object type="image/svg+xml" data="~/icons/delete.svg"/></a>
             </tr>
         }
         </tbody>
@@ -70,8 +66,8 @@
             <ul class="pagination justify-content-end">
                 @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                 {
-                    <li class="page-item @(pge == pager.CurrentPage ? "active" : "bg-secondary")">
-                        <a class="page-link bg-dark" asp-controller="Transactions" asp-action="Index" asp-route-pg="@pge">
+                    <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                        <a class="page-link @(pge == pager.CurrentPage ? "" : "bg-dark")" asp-controller="Transactions" asp-action="Index" asp-route-pg="@pge">
                             @pge
                         </a>
                     </li>

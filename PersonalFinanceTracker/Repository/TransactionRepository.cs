@@ -86,7 +86,7 @@ namespace PersonalFinanceTracker.Repository
 
             List<MonthlyIncomeAndExpenses> incomeAndExpenses = _context.Transactions
 
-                .Where(t => t.Date > twelveMonthsAgo && t.UserId == userId)
+                .Where(t => t.Date >= twelveMonthsAgo && t.UserId == userId)
                 .GroupBy(t => new { Year = t.Date.Year, Month = t.Date.Month })
                 .Select(group => new MonthlyIncomeAndExpenses
                 {

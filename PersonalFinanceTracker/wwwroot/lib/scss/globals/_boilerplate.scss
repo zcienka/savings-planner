@@ -16,24 +16,20 @@ body {
         background-color: var(--main-color) !important;
     }
 
-    main {
-        background-color: #212529;
-    }
-
     .border-end {
-        border-right: 2px solid var(--main-color) !important;
+        border-right: 2px solid var(--secondary-color) !important;
     }
 
     .border-bottom {
-        border-bottom: 2px solid var(--main-color) !important;
+        border-bottom: 2px solid var(--secondary-color) !important;
     }
 
     .border {
-        border: 2px solid var(--main-color) !important;
+        border: 2px solid var(--secondary-color) !important;
     }
 
     hr {
-        background-color: var(--main-color) !important;
+        background-color: var(--secondary-color);
         opacity: 1;
     }
 
@@ -57,18 +53,14 @@ body {
         border-bottom-color: transparent;
     }
 
-    a {
-        text-decoration: none !important;
-    }
-
     .bg-secondary {
-        background-color: var(--main-color) !important;
+        background-color: var(--secondary-color) !important;
     }
 
     .btn, btn:hover {
-        background-color: var(--main-color);
+        background-color: var(--main-color) !important;
         border-radius: 4px;
-        color: var(--text-color);
+        color: var(--text-color) !important;
     }
 
     @media screen and (min-width: 769px) {
@@ -77,13 +69,40 @@ body {
         }
     }
 
-    .page-link {
-        a {
-            color: var(--text-color);
-        }
+    table {
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        margin-top: -10px;
+    }
 
-        .active {
-            background-color: var(--main-color);
-        }
+    td:first-child {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+
+    td:last-child {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+
+    .btn-primary {
+        border-color: inherit;
+    }
+
+    td {
+        background-color: var(--secondary-color) !important;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .page-item.active, .page-link {
+        border-color: var(--secondary-color) !important;
+        background-color: inherit !important;
+    }
+
+    .page-item.active {
+        background-color: var(--main-color) !important;
     }
 }
