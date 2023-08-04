@@ -19,13 +19,13 @@ namespace PersonalFinanceTracker.Data
                     await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
 
                 // Users
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<SampleUser>>();
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 string adminUserEmail = "admin@gmail.com";
 
                 var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
                 if (adminUser == null)
                 {
-                    var newAdminUser = new SampleUser()
+                    var newAdminUser = new User()
                     {
                         FirstName = "Jan",
                         LastName = "Kowalski",
@@ -43,7 +43,7 @@ namespace PersonalFinanceTracker.Data
                 var appUser = await userManager.FindByEmailAsync(appUserEmail);
                 if (appUser == null)
                 {
-                    var newAppUser = new SampleUser()
+                    var newAppUser = new User()
                     {
                         FirstName = "Janusz",
                         LastName = "Nowak",

@@ -8,10 +8,12 @@ namespace PersonalFinanceTracker.Repository
     public class TransactionRepository : ITransactionRepository
     {
         private readonly ApplicationDbContext _context;
+
         public TransactionRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public int Add(Transaction transaction)
         {
             _context.Add(transaction);
@@ -53,6 +55,7 @@ namespace PersonalFinanceTracker.Repository
             _context.Update(transaction);
             return Save();
         }
+
         public bool Exists(string id)
         {
             return (_context.Transactions?.Any(e => e.Id == id)).GetValueOrDefault();
@@ -63,7 +66,8 @@ namespace PersonalFinanceTracker.Repository
             DateTimeOffset currentDate = DateTimeOffset.Now;
 
             List<float> transactions = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type && t.UserId == userId)
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type &&
+                            t.UserId == userId)
                 .GroupBy(t => t.Category)
                 .Select(t => t.Sum(t => t.Amount))
                 .ToList();
@@ -74,19 +78,22 @@ namespace PersonalFinanceTracker.Repository
         {
             DateTimeOffset currentDate = DateTimeOffset.Now;
             List<string> categories = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type && t.UserId == userId)
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type &&
+                            t.UserId == userId)
                 .GroupBy(t => t.Category)
                 .Select(t => t.Key)
                 .ToList();
             return categories;
         }
+
         public List<MonthlyIncomeAndExpenses> GetIncomeAndExpensesPast12Months(string userId)
         {
-            DateTime twelveMonthsAgo = DateTime.Now.AddMonths(-11);
+            DateTime currentDate = DateTime.Now;
+            DateTime firstDayOfNextMonth = new DateTime(currentDate.Year, currentDate.Month + 1, 1);
+            DateTime twelveMonthsAgo = firstDayOfNextMonth.AddMonths(-12);
 
             List<MonthlyIncomeAndExpenses> incomeAndExpenses = _context.Transactions
-
-                .Where(t => t.Date >= twelveMonthsAgo && t.UserId == userId)
+                .Where(t => t.Date > twelveMonthsAgo && t.Date < firstDayOfNextMonth && t.UserId == userId)
                 .GroupBy(t => new { Year = t.Date.Year, Month = t.Date.Month })
                 .Select(group => new MonthlyIncomeAndExpenses
                 {
@@ -95,17 +102,20 @@ namespace PersonalFinanceTracker.Repository
                     Income = group.Where(t => t.Type == "Income").Sum(t => t.Amount),
                     Expenses = group.Where(t => t.Type == "Expense").Sum(t => t.Amount)
                 })
-                .OrderBy(group => group.Month)
+                .OrderBy(group => group.Year)
+                .ThenBy(group => group.Month)
                 .ToList();
 
             return incomeAndExpenses;
         }
+
         public float GetSumByCurrentMonth(string type, string userId)
         {
             DateTimeOffset currentDate = DateTimeOffset.Now;
 
             var currentMonthIncome = _context.Transactions
-                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type && t.UserId == userId)
+                .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type &&
+                            t.UserId == userId)
                 .ToList()
                 .Sum(t => t.Amount);
             return currentMonthIncome;

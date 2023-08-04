@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;

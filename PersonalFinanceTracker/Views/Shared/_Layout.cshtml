@@ -21,7 +21,7 @@
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow bg-dark">
                 <div class="container d-flex">
                     <div class="d-flex flex-grow-1">
-                        <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">BudgetPlanner</a>
+                        <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">SavingsPlanner</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -41,22 +41,22 @@
         <div class="d-flex flex-grow-1">
             @if (@ViewData["Title"].ToString() != "Log in" && @ViewData["Title"].ToString() != "Register")
             {
-                <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark border-end" style="width: 240px;">
+                <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark border-end" style="width: 240px;">
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
                             <a class="nav-link nav-link-item text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                                <object type="image/svg+xml" data="~/icons/home.svg"/>
+                                <object type="image/svg+xml" data="~/icons/home.svg"></object>
                                 Home
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link nav-link-item text-white" asp-area="" asp-controller="Transactions" asp-action="Index">
-                                <object type="image/svg+xml" data="~/icons/transactions.svg"/>
+                                    <object type="image/svg+xml" data="~/icons/transactions.svg" ></object>
                                 Transactions
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-link-item text-white" asp-area="" asp-controller="Budget" asp-action="Index">
+                            <a class="nav-link nav-link-item text-white" asp-area="" asp-controller="Savings" asp-action="Index">
                                 <object type="image/svg+xml" data="~/icons/savings.svg"> </object>
                                 Savings
                             </a>

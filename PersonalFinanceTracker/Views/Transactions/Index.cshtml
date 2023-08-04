@@ -39,23 +39,25 @@
         <tbody>
         @foreach (var item in Model)
         {
-            <tr class="cursor-pointer" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
-                <td>
+            <tr class="cursor-pointer py-2">
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>
-                <td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
-                <td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Type)
                 </td>
-                <td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
-                <a asp-action="Delete" asp-route-id="@item.Id"><object type="image/svg+xml" data="~/icons/delete.svg"/></a>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Delete", "Transactions", new { id = item.Id })'">
+                    <object type="image/svg+xml" data="~/icons/delete.svg" class="p-2"></object>
+                </td>
             </tr>
         }
         </tbody>

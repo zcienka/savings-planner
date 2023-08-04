@@ -5,8 +5,9 @@ An application designed to help users manage and track their personal finances.
 
 
 ## Technologies
-- ASP.NET Core MVC 7
-- Entity Framework Core 7
+- ASP.NET Core MVC
+- Entity Framework Core
+- Identity Framework
 - Bootstrap
 - JavaScript
 - Chart.js

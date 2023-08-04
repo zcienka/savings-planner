@@ -54,7 +54,7 @@ namespace PersonalFinanceTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BudgetContext",
+                name: "Savings",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -249,7 +249,7 @@ namespace PersonalFinanceTracker.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BudgetContext");
+                name: "Savings");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

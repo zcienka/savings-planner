@@ -1,22 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Interfaces;
 
 namespace PersonalFinanceTracker.Controllers
 {
     [Authorize]
-    public class BudgetController : Controller
+    public class SavingsController : Controller
     {
-        private readonly IBudgetRepository _budgetRepository;
+        private readonly ISavingsRepository _savingsRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BudgetController(IBudgetRepository budgetRepository, IHttpContextAccessor httpContextAccessor)
+        public SavingsController(ISavingsRepository savingsRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _budgetRepository = budgetRepository;
+            _savingsRepository = savingsRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -24,7 +22,7 @@ namespace PersonalFinanceTracker.Controllers
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            IEnumerable<Budget> budget = await _budgetRepository.GetAll(currUserId);
+            IEnumerable<Savings> savings = await _savingsRepository.GetAll(currUserId);
 
             const int pageSize = 20;
             if (pg < 1)
@@ -32,23 +30,23 @@ namespace PersonalFinanceTracker.Controllers
                 pg = 1;
             }
 
-            int recsCount = budget.Count();
+            int recsCount = savings.Count();
 
             var pager = new Pager(recsCount, pg, pageSize);
 
             int recSkip = (pg - 1) * pageSize;
-            var data = budget
+            var data = savings
                 .Skip(recSkip)
                 .Take(pager.PageSize)
                 .ToList();
             this.ViewBag.Pager = pager;
 
-            return View(budget);
+            return View(savings);
         }
 
         public async Task<IActionResult> Details(string id)
         {
-            var savings = await _budgetRepository.GetByIdAsync(id);
+            var savings = await _savingsRepository.GetByIdAsync(id);
 
             if (savings == null)
             {
@@ -66,20 +64,20 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Budget budget)
+            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Savings savings)
         {
             if (ModelState.IsValid)
             {
-                _budgetRepository.Add(budget);
+                _savingsRepository.Add(savings);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(budget);
+            return View(savings);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var savings = await _budgetRepository.GetByIdAsync(id);
+            var savings = await _savingsRepository.GetByIdAsync(id);
 
             if (savings == null)
             {
@@ -92,21 +90,21 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id,
-            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Budget budget)
+            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Savings savings)
         {
-            if (id != budget.Id)
+            if (id != savings.Id)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid) return View(budget);
+            if (!ModelState.IsValid) return View(savings);
             try
             {
-                _budgetRepository.Update(budget);
+                _savingsRepository.Update(savings);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SavingsExists(budget.Id))
+                if (!SavingsExists(savings.Id))
                 {
                     return NotFound();
                 }
@@ -122,7 +120,7 @@ namespace PersonalFinanceTracker.Controllers
 
         public async Task<IActionResult> Delete(string id)
         {
-            var savings = await _budgetRepository.GetByIdAsync(id);
+            var savings = await _savingsRepository.GetByIdAsync(id);
             if (savings == null)
             {
                 return NotFound();
@@ -135,10 +133,10 @@ namespace PersonalFinanceTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var savings = await _budgetRepository.GetByIdAsync(id);
+            var savings = await _savingsRepository.GetByIdAsync(id);
             if (savings != null)
             {
-                _budgetRepository.Delete(savings);
+                _savingsRepository.Delete(savings);
             }
 
             return RedirectToAction(nameof(Index));
@@ -146,7 +144,7 @@ namespace PersonalFinanceTracker.Controllers
 
         private bool SavingsExists(string id)
         {
-            return _budgetRepository.Exists(id);
+            return _savingsRepository.Exists(id);
         }
     }
 }

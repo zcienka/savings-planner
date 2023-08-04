@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalFinanceTracker.Controllers
@@ -101,7 +100,7 @@ namespace PersonalFinanceTracker.Controllers
 
             return Json(new
             {
-                Balance = expenses - income,
+                Balance = income - expenses,
                 Income = income,
                 Expenses = expenses,
             });

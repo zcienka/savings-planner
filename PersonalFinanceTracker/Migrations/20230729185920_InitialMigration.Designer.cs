@@ -161,7 +161,7 @@ namespace PersonalFinanceTracker.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PersonalFinanceTracker.Areas.Identity.Data.SampleUser", b =>
+            modelBuilder.Entity("PersonalFinanceTracker.Areas.Identity.Data.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -233,7 +233,7 @@ namespace PersonalFinanceTracker.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PersonalFinanceTracker.Models.Budget", b =>
+            modelBuilder.Entity("PersonalFinanceTracker.Models.Savings", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -257,7 +257,7 @@ namespace PersonalFinanceTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BudgetContext");
+                    b.ToTable("Savings");
                 });
 
             modelBuilder.Entity("PersonalFinanceTracker.Models.Transaction", b =>
@@ -303,7 +303,7 @@ namespace PersonalFinanceTracker.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.SampleUser", null)
+                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -312,7 +312,7 @@ namespace PersonalFinanceTracker.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.SampleUser", null)
+                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -327,7 +327,7 @@ namespace PersonalFinanceTracker.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.SampleUser", null)
+                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -336,7 +336,7 @@ namespace PersonalFinanceTracker.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.SampleUser", null)
+                    b.HasOne("PersonalFinanceTracker.Areas.Identity.Data.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

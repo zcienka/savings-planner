@@ -2,7 +2,7 @@
 
 namespace PersonalFinanceTracker.Areas.Identity.Data;
 
-public class SampleUser : IdentityUser
+public class User : IdentityUser
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }

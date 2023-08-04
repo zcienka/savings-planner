@@ -12,14 +12,14 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddScoped<IBudgetRepository, BudgetRepository>();
+builder.Services.AddScoped<ISavingsRepository, SavingsRepository>();
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<SampleUser>()
+builder.Services.AddDefaultIdentity<User>()
     .AddRoles<IdentityRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
