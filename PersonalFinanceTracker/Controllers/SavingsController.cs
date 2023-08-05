@@ -22,7 +22,7 @@ namespace PersonalFinanceTracker.Controllers
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            IEnumerable<Savings> savings = await _savingsRepository.GetAll(currUserId);
+            IEnumerable<Savings> savings = await _savingsRepository.GetAllByUserId(currUserId);
 
             const int pageSize = 20;
             if (pg < 1)
@@ -41,19 +41,7 @@ namespace PersonalFinanceTracker.Controllers
                 .ToList();
             this.ViewBag.Pager = pager;
 
-            return View(savings);
-        }
-
-        public async Task<IActionResult> Details(string id)
-        {
-            var savings = await _savingsRepository.GetByIdAsync(id);
-
-            if (savings == null)
-            {
-                return NotFound();
-            }
-
-            return View(savings);
+            return View(data);
         }
 
         public IActionResult Create()
@@ -64,7 +52,8 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Savings savings)
+            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")]
+            Savings savings)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +79,8 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id,
-            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")] Savings savings)
+            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")]
+            Savings savings)
         {
             if (id != savings.Id)
             {
@@ -115,7 +105,6 @@ namespace PersonalFinanceTracker.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-
         }
 
         public async Task<IActionResult> Delete(string id)

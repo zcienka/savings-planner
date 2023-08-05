@@ -4,7 +4,8 @@ namespace PersonalFinanceTracker.Interfaces
 {
     public interface ISavingsRepository
     {
-        Task<IEnumerable<Savings>> GetAll(string userId);
+        Task<IEnumerable<Savings>> GetAll();
+        Task<IEnumerable<Savings>> GetAllByUserId(string userId);
         Task<Savings> GetByIdAsync(string id);
         bool Add(Savings savings);
         bool Update(Savings savings);

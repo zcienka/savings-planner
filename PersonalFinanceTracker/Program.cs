@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
@@ -21,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDefaultIdentity<User>()
     .AddRoles<IdentityRole>()
+    .AddUserManager<ApplicationUserManager>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

@@ -19,14 +19,14 @@
             datasets: [{
                 label: 'Income',
                 data: income,
-                backgroundColor: '#B7C9DB',
+                backgroundColor: '#7F7FAE',
                 borderWidth: 1,
                 fill: true
             },
             {
                 label: 'Expenses',
                 data: expenses,
-                backgroundColor: '#7F9BAE',
+                backgroundColor: '#CBCCDA',
                 borderWidth: 1,
                 fill: true
             }]
@@ -56,27 +56,28 @@ function OnSuccessResultIncomeCategory(data) {
     var amount = data.amount;
 
     const colors = [
-        "#5E747F", // Slate Gray
-        "#7F9BAE", // Cadet Blue
-        "#8FB8DE", // Light Steel Blue
-        "#B7C9DB", // Light Blue Gray
-        "#A6BBC8", // Blue Bell
-        "#8AA2AE", // Cadet
-        "#778899", // Light Slate Gray
-        "#B0C4DE", // Light Steel Blue
-        "#BBC4C2", // Pale Silver
-        "#7B8B93", // Cool Gray
-        "#6D8273", // Lichen Green
-        "#7E9C8D", // Sage Green
-        "#89A89B", // Dusty Green
-        "#95B2A2", // Sea Green
-        "#A5C3B0", // Celadon Green
-        "#B6D0C4", // Aquamarine
-        "#C2DAD1", // Frosted Mint
-        "#CBD8D0", // Green Ash
-        "#D4E4DB", // Glacier Green
-        "#E0EDE7", // Mist Green
+        "#5E5E7F", // Dark Violet Blue
+        "#7F7FAE", // Medium Purple
+        "#8F8FDE", // Light Pastel Purple
+        "#B7B7DB", // Soft Lavender
+        "#A6A6C8", // Light Slate Blue
+        "#8A8AAE", // Lilac
+        "#777789", // Dark Lavender
+        "#B0B0DE", // Light Lavender Blue
+        "#BBBBC2", // Lilac Grey
+        "#7B7B93", // Cool Grey 
+        "#6D6D73", // Dark Grayish Olive
+        "#7E7E8D", // Dark Grayish Olive Green
+        "#89898D", // Grayish Olive Green
+        "#9595A2", // Grayish Olive
+        "#A5A5B0", // Grayish Lavender
+        "#B6B6D0", // Grayish Lilac
+        "#C2C2DA", // Light Grayish Lilac
+        "#CBCCDA", // Pale Lilac Grey
+        "#D4D4E7", // Light Grayish Lavender
+        "#E0E0E7", // Light Grayish Blue
     ];
+
 
     var backgroundColors = [];
 
@@ -108,27 +109,28 @@ function OnSuccessResultExpensesCategory(data) {
     var categories = data.category;
     var amount = data.amount
 
+
     const colors = [
-        "#5E747F", // Slate Gray
-        "#7F9BAE", // Cadet Blue
-        "#8FB8DE", // Light Steel Blue
-        "#B7C9DB", // Light Blue Gray
-        "#A6BBC8", // Blue Bell
-        "#8AA2AE", // Cadet
-        "#778899", // Light Slate Gray
-        "#B0C4DE", // Light Steel Blue
-        "#BBC4C2", // Pale Silver
-        "#7B8B93", // Cool Gray
-        "#6D8273", // Lichen Green
-        "#7E9C8D", // Sage Green
-        "#89A89B", // Dusty Green
-        "#95B2A2", // Sea Green
-        "#A5C3B0", // Celadon Green
-        "#B6D0C4", // Aquamarine
-        "#C2DAD1", // Frosted Mint
-        "#CBD8D0", // Green Ash
-        "#D4E4DB", // Glacier Green
-        "#E0EDE7", // Mist Green
+        "#5E5E7F", // Dark Violet Blue
+        "#7F7FAE", // Medium Purple
+        "#8F8FDE", // Light Pastel Purple
+        "#B7B7DB", // Soft Lavender
+        "#A6A6C8", // Light Slate Blue
+        "#8A8AAE", // Lilac
+        "#777789", // Dark Lavender
+        "#B0B0DE", // Light Lavender Blue
+        "#BBBBC2", // Lilac Grey
+        "#7B7B93", // Cool Grey 
+        "#6D6D73", // Dark Grayish Olive
+        "#7E7E8D", // Dark Grayish Olive Green
+        "#89898D", // Grayish Olive Green
+        "#9595A2", // Grayish Olive
+        "#A5A5B0", // Grayish Lavender
+        "#B6B6D0", // Grayish Lilac
+        "#C2C2DA", // Light Grayish Lilac
+        "#CBCCDA", // Pale Lilac Grey
+        "#D4D4E7", // Light Grayish Lavender
+        "#E0E0E7", // Light Grayish Blue
     ];
 
     var backgroundColors = [];

@@ -12,7 +12,7 @@
     }
 }
 
-<div class="d-flex flex-column align-items-start">
+<div class="d-flex flex-column align-items-start w-75">
     <h1>Savings</h1>
     <button class="btn">
         <a asp-action="Create">Create New</a>
@@ -20,9 +20,9 @@
     <table class="table">
         <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
+            @* <th> *@
+            @*     @Html.DisplayNameFor(model => model.UserId) *@
+            @* </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.TargetAmount)
             </th>
@@ -41,28 +41,23 @@
         <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TargetAmount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CurrentAmount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Deadline)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+                <tr class="cursor-pointer py-2">
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.TargetAmount)
+                    </td>
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.CurrentAmount)
+                    </td>
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.Deadline)
+                    </td>
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Delete", "Savings", new { id = item.Id })'">
+                        <object type="image/svg+xml" data="~/icons/delete.svg" class="p-2"></object>
+                    </td>
+                </tr>
         }
         </tbody>
 
@@ -71,12 +66,31 @@
         @if (pager.TotalPages > 0)
         {
             <ul class="pagination justify-content-end">
+                @if (pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Savings" asp-action="Index" asp-route-pg="1">First</a>
+                    </li>
+                    <li>
+                        <a class="page-link" asp-controller="Savings" asp-action="Index" asp-route-pg="@(pager.CurrentPage - 1)">Previous</a>
+                    </li>
+
+                }
                 @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                 {
                     <li class="page-item @(pge == pager.CurrentPage ? "active" : "bg-secondary")">
-                        <a class="page-link" asp-controller="Transactions" asp-action="Index" asp-route-pg="@pge">
+                        <a class="page-link" asp-controller="Savings" asp-action="Index" asp-route-pg="@pge">
                             @pge
                         </a>
+                    </li>
+                }
+                @if (pager.CurrentPage < pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Savings" asp-action="Index" asp-route-pg="@(pager.CurrentPage + 1)">Next</a>
+                    </li>
+                    <li>
+                        <a class="page-link" asp-controller="Savings" asp-action="Index" asp-route-pg="@(pager.TotalPages)">Last</a>
                     </li>
                 }
             </ul>

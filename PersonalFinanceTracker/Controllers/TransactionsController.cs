@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
+using PersonalFinanceTracker.Dtos;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -12,15 +13,17 @@ namespace PersonalFinanceTracker.Controllers
         private readonly ITransactionRepository _transactionRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionsController(ITransactionRepository transactionRepository, IHttpContextAccessor httpContextAccessor)
+        public TransactionsController(ITransactionRepository transactionRepository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _transactionRepository = transactionRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+
             IEnumerable<Transaction> transactions = await _transactionRepository.GetAllByUserId(currUserId);
 
             const int pageSize = 20;
@@ -31,15 +34,15 @@ namespace PersonalFinanceTracker.Controllers
 
             int recsCount = transactions.Count();
 
-            var pager = new Pager(recsCount, pg, pageSize); 
+            var pager = new Pager(recsCount, pg, pageSize);
 
             int recSkip = (pg - 1) * pageSize;
             var data = transactions
                 .Skip(recSkip)
-                .Take(pager.PageSize)   
+                .Take(pager.PageSize)
                 .ToList();
             this.ViewBag.Pager = pager;
-            
+
             return View(data);
         }
 
@@ -50,7 +53,7 @@ namespace PersonalFinanceTracker.Controllers
 
             var chartData = _transactionRepository.GetIncomeAndExpensesPast12Months(currUserId);
 
-            return Json(chartData); 
+            return Json(chartData);
         }
 
         [HttpGet]
@@ -106,18 +109,6 @@ namespace PersonalFinanceTracker.Controllers
             });
         }
 
-        public async Task<IActionResult> Details(string id)
-        {
-            var transaction = await _transactionRepository.GetByIdAsync(id);
-
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            return View(transaction);
-        }
-
         public IActionResult Create()
         {
             return View();
@@ -125,15 +116,27 @@ namespace PersonalFinanceTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,Category,Date,Description,Type,Amount")] Transaction transaction)
+        public async Task<IActionResult> Create(
+            [Bind("Category,Date,Description,Type,Amount")] TransactionDto transactionDto)
         {
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+
             if (ModelState.IsValid)
             {
+                var transaction = new Transaction()
+                {
+                    Category = transactionDto.Category,
+                    Amount = transactionDto.Amount,
+                    Description = transactionDto.Description,
+                    Date = transactionDto.Date,
+                    Type = transactionDto.Type,
+                    UserId = currUserId,
+                };
                 _transactionRepository.Add(transaction);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(transaction);
+            return View(transactionDto);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -154,6 +157,8 @@ namespace PersonalFinanceTracker.Controllers
             [Bind("Id,UserId,Category,Date,Description,Type,Amount")]
             Transaction transaction)
         {
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+
             if (id != transaction.Id)
             {
                 return NotFound();
@@ -177,7 +182,6 @@ namespace PersonalFinanceTracker.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-
         }
 
         public async Task<IActionResult> Delete(string id)

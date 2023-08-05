@@ -11,7 +11,7 @@
         pager = ViewBag.Pager;
     }
 }
-<div class="d-flex flex-column align-items-start">
+<div class="d-flex flex-column align-items-start w-75">
     <h1>Transactions</h1>
     <button class="btn">
         <a asp-action="Create">Create New</a>
@@ -44,7 +44,7 @@
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>
                 <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
-                    @Html.DisplayFor(modelItem => item.Date)
+                    @item.Date.ToString("MM/dd/yyyy HH:mm:ss")
                 </td>
                 <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Description)
@@ -66,12 +66,30 @@
         @if (pager.TotalPages > 0)
         {
             <ul class="pagination justify-content-end">
+                @if (pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Transactions" asp-action="Index" asp-route-pg="1">First</a>
+                    </li>
+                    <li>
+                        <a class="page-link" asp-controller="Transactions" asp-action="Index" asp-route-pg="@(pager.CurrentPage - 1)">Previous</a>
+                    </li>
+                }
                 @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                 {
-                    <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
-                        <a class="page-link @(pge == pager.CurrentPage ? "" : "bg-dark")" asp-controller="Transactions" asp-action="Index" asp-route-pg="@pge">
+                    <li class="page-item @(pge == pager.CurrentPage ? "active" : "bg-secondary")">
+                        <a class="page-link" asp-controller="Transactions" asp-action="Index" asp-route-pg="@pge">
                             @pge
                         </a>
+                    </li>
+                }
+                @if (pager.CurrentPage < pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Transactions" asp-action="Index" asp-route-pg="@(pager.CurrentPage + 1)">Next</a>
+                    </li>
+                    <li>
+                        <a class="page-link" asp-controller="Transactions" asp-action="Index" asp-route-pg="@(pager.TotalPages)">Last</a>
                     </li>
                 }
             </ul>

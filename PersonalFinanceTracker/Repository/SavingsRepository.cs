@@ -25,11 +25,18 @@ namespace PersonalFinanceTracker.Repository
             return Save();
         }
 
-        public async Task<IEnumerable<Savings>> GetAll(string userId)
+        public async Task<IEnumerable<Savings>> GetAll()
         {
-            return await _context.Savings.Where(b=> b.UserId == userId).ToListAsync();
+            return await _context.Savings.ToListAsync();
         }
 
+        public async Task<IEnumerable<Savings>> GetAllByUserId(string userId)
+        {
+            return await _context.Savings
+                .Where(s => s.UserId == userId)
+                .OrderBy(s => s.Deadline)
+                .ToListAsync();
+        }
         public async Task<Savings> GetByIdAsync(string id)
         {
             return await _context.Savings.FirstOrDefaultAsync(i => i.Id == id);

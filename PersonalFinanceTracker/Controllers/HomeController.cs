@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PersonalFinanceTracker.Models;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using PersonalFinanceTracker.Areas.Identity.Data;
+using PersonalFinanceTracker.ViewModels;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -9,15 +11,19 @@ namespace PersonalFinanceTracker.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationUserManager _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationUserManager userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var userFirstName = await _userManager.GetFirstNameAsync(User);
+            var viewModel = new HomeViewModel { UserFirstName = userFirstName };
+            return View(viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

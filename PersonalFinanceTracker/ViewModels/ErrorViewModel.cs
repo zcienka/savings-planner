@@ -1,4 +1,4 @@
-namespace PersonalFinanceTracker.Models
+namespace PersonalFinanceTracker.ViewModels
 {
     public class ErrorViewModel
     {
