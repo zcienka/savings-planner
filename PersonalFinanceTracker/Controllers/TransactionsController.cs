@@ -4,6 +4,7 @@ using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Dtos;
+using PersonalFinanceTracker.ViewModels;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -42,6 +43,9 @@ namespace PersonalFinanceTracker.Controllers
                 .Take(pager.PageSize)
                 .ToList();
             this.ViewBag.Pager = pager;
+
+            var categories = _transactionRepository.GetAllCategories();
+            this.ViewBag.Categories = categories;
 
             return View(data);
         }
@@ -116,13 +120,13 @@ namespace PersonalFinanceTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Category,Date,Description,Type,Amount")] TransactionDto transactionDto)
+        public async Task<IActionResult> Create(TransactionsViewModel viewModel)
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
             if (ModelState.IsValid)
             {
+                TransactionDto transactionDto = viewModel.TransactionDto;
                 var transaction = new Transaction()
                 {
                     Category = transactionDto.Category,
@@ -136,7 +140,10 @@ namespace PersonalFinanceTracker.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(transactionDto);
+            var categories = _transactionRepository.GetAllCategories();
+            this.ViewBag.Categories = categories;
+
+            return View();
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -153,10 +160,9 @@ namespace PersonalFinanceTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id,
-            [Bind("Id,UserId,Category,Date,Description,Type,Amount")]
-            Transaction transaction)
+        public async Task<IActionResult> Edit(string id, TransactionsViewModel viewModel)
         {
+            var transaction = viewModel.Transaction;
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
             if (id != transaction.Id)

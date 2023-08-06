@@ -61,11 +61,11 @@ namespace PersonalFinanceTracker.Repository
             return (_context.Transactions?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public List<float> GetTransactionListByCurrentMonth(string type, string userId)
+        public List<decimal> GetTransactionListByCurrentMonth(string type, string userId)
         {
             DateTimeOffset currentDate = DateTimeOffset.Now;
 
-            List<float> transactions = _context.Transactions
+            List<decimal> transactions = _context.Transactions
                 .Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month && t.Type == type &&
                             t.UserId == userId)
                 .GroupBy(t => t.Category)
@@ -109,7 +109,7 @@ namespace PersonalFinanceTracker.Repository
             return incomeAndExpenses;
         }
 
-        public float GetSumByCurrentMonth(string type, string userId)
+        public decimal GetSumByCurrentMonth(string type, string userId)
         {
             DateTimeOffset currentDate = DateTimeOffset.Now;
 
@@ -119,6 +119,12 @@ namespace PersonalFinanceTracker.Repository
                 .ToList()
                 .Sum(t => t.Amount);
             return currentMonthIncome;
+        }
+
+        public async Task<List<TransactionCategory>> GetAllCategories()
+        {
+            List<TransactionCategory> categories = await _context.TransactionCategories.ToListAsync();
+            return categories;
         }
     }
 }

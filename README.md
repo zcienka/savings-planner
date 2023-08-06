@@ -10,7 +10,9 @@ An application designed to help users manage and track their personal finances.
 
 ## Features
 - User registration and authentication: Users can create an account and log in securely to access their personal finance data.
-
+- Admin and user roles: Admins can view all users and their transactions. Users can only view their own transactions.
+- Transaction and savings management: Users can add, edit, and delete transactions.
+- Transaction visualization: Users can view their transactions in a chart.
 
 
 ## Technologies

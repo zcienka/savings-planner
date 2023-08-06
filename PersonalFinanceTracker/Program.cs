@@ -36,7 +36,7 @@ if (!app.Environment.IsDevelopment())
 
 if (args[0].ToLower() == "seeddata")
 {
-    await Seed.SeedUsersAndRolesAsync(app);
+    await Seed.SeedDataAsync(app);
 }
 
 app.UseDeveloperExceptionPage();

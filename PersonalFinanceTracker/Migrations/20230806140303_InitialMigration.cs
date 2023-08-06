@@ -59,14 +59,38 @@ namespace PersonalFinanceTracker.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    TargetAmount = table.Column<float>(type: "real", nullable: false),
-                    CurrentAmount = table.Column<float>(type: "real", nullable: false),
-                    Deadline = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TargetAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    CurrentAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BudgetContext", x => x.Id);
+                    table.PrimaryKey("PK_Savings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SavingsStatus",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavingsStatus", x => x.Name);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TransactionCategories",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransactionCategories", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,11 +103,22 @@ namespace PersonalFinanceTracker.Migrations
                     Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
-                    Amount = table.Column<float>(type: "real", nullable: false)
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TransactionTypes",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransactionTypes", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,7 +287,16 @@ namespace PersonalFinanceTracker.Migrations
                 name: "Savings");
 
             migrationBuilder.DropTable(
+                name: "SavingsStatus");
+
+            migrationBuilder.DropTable(
+                name: "TransactionCategories");
+
+            migrationBuilder.DropTable(
                 name: "Transactions");
+
+            migrationBuilder.DropTable(
+                name: "TransactionTypes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

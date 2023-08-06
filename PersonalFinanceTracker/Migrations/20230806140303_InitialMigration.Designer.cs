@@ -12,8 +12,8 @@ using PersonalFinanceTracker.Data;
 namespace PersonalFinanceTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230805174311_ChangeSavings")]
-    partial class ChangeSavings
+    [Migration("20230806140303_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -238,8 +238,8 @@ namespace PersonalFinanceTracker.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<float>("CurrentAmount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CurrentAmount")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -251,8 +251,8 @@ namespace PersonalFinanceTracker.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<float>("TargetAmount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TargetAmount")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -267,13 +267,23 @@ namespace PersonalFinanceTracker.Migrations
                     b.ToTable("Savings");
                 });
 
+            modelBuilder.Entity("PersonalFinanceTracker.Models.SavingsStatus", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("SavingsStatus");
+                });
+
             modelBuilder.Entity("PersonalFinanceTracker.Models.Transaction", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -297,6 +307,26 @@ namespace PersonalFinanceTracker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("PersonalFinanceTracker.Models.TransactionCategory", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("TransactionCategories");
+                });
+
+            modelBuilder.Entity("PersonalFinanceTracker.Models.TransactionType", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("TransactionTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

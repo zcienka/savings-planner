@@ -23,7 +23,7 @@
 
             if (startPage <= 0)
             {
-                endPage -=  (startPage - 1);
+                endPage -= (startPage - 1);
                 startPage = 1;
             }
 

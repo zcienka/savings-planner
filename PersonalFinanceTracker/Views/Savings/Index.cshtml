@@ -4,7 +4,6 @@
     ViewData["Title"] = "Savings";
 
     Pager pager = new Pager();
-    int pageNo = 0;
 
     if (ViewBag.Pager != null)
     {
@@ -12,7 +11,7 @@
     }
 }
 
-<div class="d-flex flex-column align-items-start w-75">
+<div class="d-flex flex-column align-items-start">
     <h1>Savings</h1>
     <button class="btn">
         <a asp-action="Create">Create New</a>
@@ -20,9 +19,9 @@
     <table class="table">
         <thead>
         <tr>
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.UserId) *@
-            @* </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.TargetAmount)
             </th>
@@ -41,23 +40,26 @@
         <tbody>
         @foreach (var item in Model)
         {
-                <tr class="cursor-pointer py-2">
-                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
-                        @Html.DisplayFor(modelItem => item.TargetAmount)
-                    </td>
-                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
-                        @Html.DisplayFor(modelItem => item.CurrentAmount)
-                    </td>
-                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
-                        @Html.DisplayFor(modelItem => item.Deadline)
-                    </td>
-                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td class="align-middle" onclick="location.href = '@Url.Action("Delete", "Savings", new { id = item.Id })'">
-                        <object type="image/svg+xml" data="~/icons/delete.svg" class="p-2"></object>
-                    </td>
-                </tr>
+            <tr class="cursor-pointer py-2">
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                    @Html.DisplayFor(modelItem => item.TargetAmount)
+                </td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                    @Html.DisplayFor(modelItem => item.CurrentAmount)
+                </td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                    @item.Deadline.ToString("MM/dd/yyyy")
+                </td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td class="align-middle" onclick="location.href = '@Url.Action("Delete", "Savings", new { id = item.Id })'">
+                    <object type="image/svg+xml" data="~/icons/delete.svg" class="p-2"></object>
+                </td>
+            </tr>
         }
         </tbody>
 
