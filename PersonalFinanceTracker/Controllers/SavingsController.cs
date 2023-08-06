@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Interfaces;
+using PersonalFinanceTracker.Repository;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -44,9 +45,12 @@ namespace PersonalFinanceTracker.Controllers
             return View(data);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var savings = new Savings(); 
+            var savingsStatus = await _savingsRepository.GetSavingsStatus();
+
+            return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus));
         }
 
         [HttpPost]
@@ -55,13 +59,15 @@ namespace PersonalFinanceTracker.Controllers
             [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")]
             Savings savings)
         {
+            IEnumerable<SavingsStatus> savingsStatus = await _savingsRepository.GetSavingsStatus();
+
             if (ModelState.IsValid)
             {
                 _savingsRepository.Add(savings);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(savings);
+            return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus)); 
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -72,8 +78,9 @@ namespace PersonalFinanceTracker.Controllers
             {
                 return NotFound();
             }
+            IEnumerable<SavingsStatus> savingsStatus = await _savingsRepository.GetSavingsStatus();
 
-            return View(savings);
+            return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus));
         }
 
         [HttpPost]
@@ -82,12 +89,14 @@ namespace PersonalFinanceTracker.Controllers
             [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")]
             Savings savings)
         {
+            IEnumerable<SavingsStatus> savingsStatus = await _savingsRepository.GetSavingsStatus();
+
             if (id != savings.Id)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid) return View(savings);
+            if (!ModelState.IsValid) return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus));
             try
             {
                 _savingsRepository.Update(savings);

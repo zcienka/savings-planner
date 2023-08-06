@@ -58,5 +58,9 @@ namespace PersonalFinanceTracker.Repository
         {
             return (_context.Savings?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        public async Task<IEnumerable<SavingsStatus>> GetSavingsStatus()
+        {
+            return await _context.SavingsStatus.ToListAsync();
+        }
     }
 }

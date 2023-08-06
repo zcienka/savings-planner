@@ -12,5 +12,6 @@ namespace PersonalFinanceTracker.Interfaces
         bool Delete(Savings savings);
         bool Save();
         bool Exists(string id);
+        Task<IEnumerable<SavingsStatus>> GetSavingsStatus();
     }
 }

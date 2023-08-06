@@ -16,6 +16,7 @@ namespace PersonalFinanceTracker.Interfaces
         List<MonthlyIncomeAndExpenses> GetIncomeAndExpensesPast12Months(string userId);
         decimal GetSumByCurrentMonth(string type, string userId);
         Task<IEnumerable<Transaction>> GetAllByUserId(string userId);
-        Task<List<TransactionCategory>> GetAllCategories();
+        Task<IEnumerable<TransactionCategory>> GetAllCategories();
+        Task<IEnumerable<TransactionType>> GetAllTypes();
     }
 }

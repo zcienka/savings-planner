@@ -86,6 +86,12 @@ body .page-item.active, body .page-link {
 body .page-item.active {
   background-color: var(--main-color) !important;
 }
+body .dropdown-item {
+  background-color: white;
+}
+body textarea {
+  resize: none;
+}
 
 p, a, a:hover, td, h1, h2, h3, h4, h5, h6, dt, dd {
   color: var(--text-color) !important;
@@ -95,7 +101,7 @@ a {
   text-decoration: none;
 }
 
-form, input, label, p {
+form, input, label {
   color: #868686 !important;
 }
 

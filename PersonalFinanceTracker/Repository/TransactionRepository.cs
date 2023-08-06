@@ -121,10 +121,14 @@ namespace PersonalFinanceTracker.Repository
             return currentMonthIncome;
         }
 
-        public async Task<List<TransactionCategory>> GetAllCategories()
+        public async Task<IEnumerable<TransactionCategory>> GetAllCategories()
         {
-            List<TransactionCategory> categories = await _context.TransactionCategories.ToListAsync();
-            return categories;
+            return await _context.TransactionCategories.ToListAsync();
+        }
+
+        public async Task<IEnumerable<TransactionType>> GetAllTypes()
+        {
+            return await _context.TransactionTypes.ToListAsync();
         }
     }
 }

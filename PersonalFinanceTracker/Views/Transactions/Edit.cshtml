@@ -1,7 +1,9 @@
-﻿@model PersonalFinanceTracker.Models.Transaction
+﻿@model Tuple<Transaction, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>
 
 @{
     ViewData["Title"] = "Edit";
+    var categories = Model.Item2;
+    var types = Model.Item3;
 }
 
 <div class="d-flex flex-column align-items-start">
@@ -9,30 +11,37 @@
 
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Id"/>
+        <div class="dropdown mb-2">
+            <label asp-for="Item1.Category" class="control-label">Category</label>
+            <select asp-for="Item1.Category" asp-items="@(new SelectList(categories, "Name", "Name"))" class="dropdown-item rounded-2 px-3 py-2 valid">
+            </select>
+            <span asp-validation-for="Item1.Category" class="text-danger"></span>
+        </div>
 
-        @* <div class="form-group mb-2"> *@
-        @*     <label asp-for="UserId" class="control-label"></label> *@
-        @*     <input asp-for="UserId" class="form-control"/> *@
-        @*     <span asp-validation-for="UserId" class="text-danger"></span> *@
-        @* </div> *@
         <div class="form-group mb-2">
-            <label asp-for="Category" class="control-label"></label>
-            <input asp-for="Category" class="form-control"/>
-            <span asp-validation-for="Category" class="text-danger"></span>
+            <label asp-for="Item1.Date" class="control-label">Date</label>
+            <input type="datetime" asp-for="Item1.Date" class="form-control"/>
+            <span asp-validation-for="Item1.Date" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-2">
+            <label asp-for="Item1.Description" class="control-label">Description</label>
+            <textarea asp-for="Item1.Description" class="form-control" cols="40" rows="5"></textarea>
+            <span asp-validation-for="Item1.Description" class="text-danger"></span>
+        </div>
+        <div class="dropdown mb-2">
+            <label asp-for="Item1.Type" class="control-label">Type</label>
+            <select asp-for="Item1.Type" asp-items="@(new SelectList(types, "Name", "Name"))" class="dropdown-item rounded-2 px-3 py-2 valid">
+            </select>
+            <span asp-validation-for="Item1.Type" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
-            <label asp-for="Date" class="control-label"></label>
-            <input asp-for="Date" class="form-control"/>
-            <span asp-validation-for="Date" class="text-danger"></span>
+            <label asp-for="Item1.Amount" class="control-label"></label>
+            <input asp-for="Item1.Amount" class="form-control" />
+            <span asp-validation-for="Item1.Amount" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
-            <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control"/>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="form-group mb02">
-            <input type="submit" value="Save" class="btn"/>
+            <input type="submit" value="Create" class="btn"/>
         </div>
     </form>
     <div>
@@ -40,8 +49,6 @@
     </div>
 </div>
 
-
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

@@ -4,7 +4,6 @@ using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Dtos;
-using PersonalFinanceTracker.ViewModels;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -21,7 +20,7 @@ namespace PersonalFinanceTracker.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index(int pg = 1)
+        public async Task<IActionResult> Index(int? categoryId, int pg = 1)
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
@@ -44,10 +43,9 @@ namespace PersonalFinanceTracker.Controllers
                 .ToList();
             this.ViewBag.Pager = pager;
 
-            var categories = _transactionRepository.GetAllCategories();
-            this.ViewBag.Categories = categories;
+            IEnumerable<TransactionCategory> categories = await _transactionRepository.GetAllCategories();
 
-            return View(data);
+            return View(new Tuple<IEnumerable<Transaction>, IEnumerable<TransactionCategory>>(data, categories));
         }
 
         [HttpGet]
@@ -113,21 +111,24 @@ namespace PersonalFinanceTracker.Controllers
             });
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            TransactionDto transactionDto = new TransactionDto();
+            var categories = await _transactionRepository.GetAllCategories();
+            var types = await _transactionRepository.GetAllTypes();
+
+            return View(new Tuple<TransactionDto, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transactionDto, categories, types));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TransactionsViewModel viewModel)
+        public async Task<IActionResult> Create(TransactionDto transactionDto)
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
             if (ModelState.IsValid)
             {
-                TransactionDto transactionDto = viewModel.TransactionDto;
-                var transaction = new Transaction()
+                var transaction = new Transaction
                 {
                     Category = transactionDto.Category,
                     Amount = transactionDto.Amount,
@@ -140,14 +141,17 @@ namespace PersonalFinanceTracker.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var categories = _transactionRepository.GetAllCategories();
-            this.ViewBag.Categories = categories;
+            var categories = await _transactionRepository.GetAllCategories();
+            var types = await _transactionRepository.GetAllTypes();
 
-            return View();
+            return View(new Tuple<TransactionDto, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transactionDto, categories, types));
         }
 
         public async Task<IActionResult> Edit(string id)
         {
+            var categories = await _transactionRepository.GetAllCategories();
+            var types = await _transactionRepository.GetAllTypes();
+
             var transaction = await _transactionRepository.GetByIdAsync(id);
 
             if (transaction == null)
@@ -155,22 +159,23 @@ namespace PersonalFinanceTracker.Controllers
                 return NotFound();
             }
 
-            return View(transaction);
+            return View(new Tuple<Transaction, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transaction, categories, types));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, TransactionsViewModel viewModel)
+        public async Task<IActionResult> Edit(string id, Transaction transaction)
         {
-            var transaction = viewModel.Transaction;
-            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var categories = await _transactionRepository.GetAllCategories();
+            var types = await _transactionRepository.GetAllTypes();
 
             if (id != transaction.Id)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid) return View(transaction);
+            if (!ModelState.IsValid)
+                return View(new Tuple<Transaction, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transaction, categories, types));
             try
             {
                 _transactionRepository.Update(transaction);

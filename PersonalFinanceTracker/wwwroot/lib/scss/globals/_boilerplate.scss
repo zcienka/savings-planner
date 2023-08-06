@@ -104,4 +104,12 @@ body {
     .page-item.active {
         background-color: var(--main-color) !important;
     }
+
+    .dropdown-item {
+        background-color: white;
+    }
+
+    textarea {
+        resize: none;
+    }
 }

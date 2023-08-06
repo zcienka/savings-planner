@@ -1,7 +1,10 @@
-﻿@model IEnumerable<PersonalFinanceTracker.Models.Transaction>
+﻿@model Tuple<IEnumerable<Transaction>, IEnumerable<TransactionCategory>>
 
 @{
     ViewData["Title"] = "Transactions";
+
+    var transactions = Model.Item1;
+    var categories = Model.Item2;
 
     Pager pager = new Pager();
 
@@ -9,35 +12,50 @@
     {
         pager = ViewBag.Pager;
     }
+
+    if (ViewBag.Categories != null)
+    {
+    }
 }
+<script>
+    function filterTransactions(categoryName) {
+        if (categoryName === "") {
+            window.location.href = '@Url.Action("Index", "Transactions")';
+        } else {
+            window.location.href = '@Url.Action("Index", "Transactions")?categoryName=' + categoryName;
+        }
+    }
+</script>
 
 <div class="d-flex flex-column align-items-start">
     <h1>Transactions</h1>
     <button class="btn">
         <a asp-action="Create">Create New</a>
     </button>
+
+
     <table class="table">
         <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Amount)
             </th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in transactions)
         {
             <tr class="cursor-pointer py-2">
                 <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">

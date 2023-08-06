@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Areas.Identity.Data;
 using PersonalFinanceTracker.Models;
+using System.Linq;
 
 namespace PersonalFinanceTracker.Data
 {
@@ -13,14 +14,45 @@ namespace PersonalFinanceTracker.Data
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+      
                 await SeedRolesAsync(serviceScope);
-                await SeedUsersAsync(serviceScope);
-                await SeedTransactionCategoriesAsync(dbContext);
-                await SeedTransactionTypesAsync(dbContext);
-                await SeedSavingsStatusAsync(dbContext);
-                await SeedTransactionsAsync(dbContext, serviceScope);
-                await SeedSavingsAsync(dbContext, serviceScope);
+
+                if (IsDatabaseEmpty<User>(dbContext))
+                {
+                    await SeedUsersAsync(serviceScope);
+                }
+
+                if (IsDatabaseEmpty<TransactionCategory>(dbContext))
+                {
+                    await SeedTransactionCategoriesAsync(dbContext);
+                }
+
+                if (IsDatabaseEmpty<TransactionType>(dbContext))
+                {
+                    await SeedTransactionTypesAsync(dbContext);
+                }
+
+                if (IsDatabaseEmpty<SavingsStatus>(dbContext))
+                {
+                    await SeedSavingsStatusAsync(dbContext);
+                }
+
+                if (IsDatabaseEmpty<Transaction>(dbContext))
+                {
+                    await SeedTransactionsAsync(dbContext, serviceScope);
+                }
+
+                if (IsDatabaseEmpty<Savings>(dbContext))
+                {
+                    await SeedSavingsAsync(dbContext, serviceScope);
+                }
             }
+        }
+
+
+        public static bool IsDatabaseEmpty<T>(DbContext context) where T : class
+        {
+            return !context.Set<T>().Any(); 
         }
 
         private static async Task SeedRolesAsync(IServiceScope serviceScope)
