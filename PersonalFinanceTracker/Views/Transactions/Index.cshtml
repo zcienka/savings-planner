@@ -1,9 +1,7 @@
-﻿@model Tuple<IEnumerable<Transaction>, IEnumerable<TransactionCategory>>
+﻿@model IEnumerable<Transaction>
 
 @{
     ViewData["Title"] = "Transactions";
-
-    var transactions = Model.Item1;
 
     Pager pager = new Pager();
 
@@ -11,17 +9,7 @@
     {
         pager = ViewBag.Pager;
     }
-
 }
-<script>
-    function filterTransactions(categoryName) {
-        if (categoryName === "") {
-            window.location.href = '@Url.Action("Index", "Transactions")';
-        } else {
-            window.location.href = '@Url.Action("Index", "Transactions")?categoryName=' + categoryName;
-        }
-    }
-</script>
 
 <div class="d-flex flex-column align-items-start">
     <h1>Transactions</h1>
@@ -29,31 +17,48 @@
         <a asp-action="Create">Create New</a>
     </button>
 
-
     <table class="table">
         <thead>
         <tr>
+            @if (User.IsInRole(UserRoles.Admin))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserId)
+                </th>
+            }
             <th>
-                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Category)
+                @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Date)
+                @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Description)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Type)
+                @Html.DisplayNameFor(model => model.Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Item1.FirstOrDefault().Amount)
+                @Html.DisplayNameFor(model => model.Amount)
             </th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in transactions)
+        @foreach (var item in Model)
         {
             <tr class="cursor-pointer py-2">
+                @if (User.IsInRole(UserRoles.Admin))
+                {
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.UserId)
+                    </td>
+                }
                 <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Transactions", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>

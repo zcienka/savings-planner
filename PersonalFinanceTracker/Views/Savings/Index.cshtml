@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PersonalFinanceTracker.Models.Savings>
+﻿@model IEnumerable<Savings>
 
 @{
     ViewData["Title"] = "Savings";
@@ -19,6 +19,15 @@
     <table class="table">
         <thead>
         <tr>
+            @if (User.IsInRole(UserRoles.Admin))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserId)
+                </th>
+            }
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -41,6 +50,15 @@
         @foreach (var item in Model)
         {
             <tr class="cursor-pointer py-2">
+                @if (User.IsInRole(UserRoles.Admin))
+                {
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
+                        @Html.DisplayFor(modelItem => item.UserId)
+                    </td>
+                }
                 <td class="align-middle" onclick="location.href = '@Url.Action("Edit", "Savings", new { id = item.Id })'">
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
@@ -76,7 +94,6 @@
                     <li>
                         <a class="page-link" asp-controller="Savings" asp-action="Index" asp-route-pg="@(pager.CurrentPage - 1)">Previous</a>
                     </li>
-
                 }
                 @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                 {

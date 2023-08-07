@@ -11,13 +11,32 @@
 
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Savings.Id" />
-        <input type="hidden" asp-for="Savings.UserId" />
-        <input type="hidden" asp-for="Savings.Date" />
+        <input type="hidden" asp-for="Savings.Id"/>
+        <input type="hidden" asp-for="Savings.UserId"/>
+        <input type="hidden" asp-for="Savings.Date"/>
+
+        @if (User.IsInRole(UserRoles.Admin))
+        {
+            <div class="form-group">
+                <label asp-for="Savings.Id" class="control-label"></label>
+                <input asp-for="Savings.Id" class="form-control"/>
+                <span asp-validation-for="Savings.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Savings.UserId" class="control-label"></label>
+                <input asp-for="Savings.UserId" class="form-control"/>
+                <span asp-validation-for="Savings.UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Savings.Date" class="control-label"></label>
+                <input asp-for="Savings.Date" class="form-control"/>
+                <span asp-validation-for="Savings.Date" class="text-danger"></span>
+            </div>
+        }
 
         <div class="form-group mb-2">
             <label asp-for="Savings.Title" class="control-label"></label>
-            <input asp-for="Savings.Title" class="form-control" />
+            <input asp-for="Savings.Title" class="form-control"/>
             <span asp-validation-for="Savings.Title" class="text-danger"></span>
         </div>
 
@@ -28,12 +47,12 @@
         </div>
         <div class="form-group mb-2">
             <label asp-for="Savings.CurrentAmount" class="control-label"></label>
-            <input asp-for="Savings.CurrentAmount" class="form-control" />
+            <input asp-for="Savings.CurrentAmount" class="form-control"/>
             <span asp-validation-for="Savings.CurrentAmount" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
             <label asp-for="Savings.Deadline" class="control-label"></label>
-            <input asp-for="Savings.Deadline" type="date" class="form-control" />
+            <input asp-for="Savings.Deadline" type="date" class="form-control"/>
             <span asp-validation-for="Savings.Deadline" class="text-danger"></span>
         </div>
         <div class="dropdown mb-2">
@@ -46,7 +65,7 @@
             <input type="submit" value="Save" class="btn"/>
         </div>
     </form>
-    
+
     <div>
         <a asp-action="Index">Back to List</a>
     </div>

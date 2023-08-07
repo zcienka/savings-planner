@@ -24,7 +24,15 @@ namespace PersonalFinanceTracker.Controllers
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            IEnumerable<Savings> savings = await _savingsRepository.GetAllByUserId(currUserId);
+            IEnumerable<Savings> savings;
+            if (User.IsInRole(UserRoles.Admin))
+            {
+                savings = await _savingsRepository.GetAll();
+            }
+            else
+            {
+                savings = await _savingsRepository.GetAllByUserId(currUserId);
+            }
 
             const int pageSize = 20;
             if (pg < 1)
@@ -45,6 +53,7 @@ namespace PersonalFinanceTracker.Controllers
 
             return View(data);
         }
+
 
         public async Task<IActionResult> Create()
         {

@@ -5,6 +5,7 @@ using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Dtos;
 using PersonalFinanceTracker.ViewModels;
+using PersonalFinanceTracker.Repository;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -21,11 +22,21 @@ namespace PersonalFinanceTracker.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index(int? categoryId, int pg = 1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
-            IEnumerable<Transaction> transactions = await _transactionRepository.GetAllByUserId(currUserId);
+            IEnumerable<Transaction> transactions;
+
+
+            if (User.IsInRole(UserRoles.Admin))
+            {
+                transactions = await _transactionRepository.GetAll();
+            }
+            else
+            {
+                transactions = await _transactionRepository.GetAllByUserId(currUserId);
+            }
 
             const int pageSize = 20;
             if (pg < 1)
@@ -44,9 +55,7 @@ namespace PersonalFinanceTracker.Controllers
                 .ToList();
             this.ViewBag.Pager = pager;
 
-            IEnumerable<TransactionCategory> categories = await _transactionRepository.GetAllCategories();
-
-            return View(new Tuple<IEnumerable<Transaction>, IEnumerable<TransactionCategory>>(data, categories));
+            return View(data);
         }
 
         [HttpGet]
