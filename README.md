@@ -32,7 +32,6 @@ An application designed to help users manage and track their personal finances.
 - Bootstrap 5
 - JavaScript
 - Chart.js
-- Sass
 - Docker
 
 ## Getting Started
