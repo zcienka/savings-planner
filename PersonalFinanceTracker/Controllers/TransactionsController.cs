@@ -4,6 +4,7 @@ using PersonalFinanceTracker.Interfaces;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Dtos;
+using PersonalFinanceTracker.ViewModels;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -113,27 +114,42 @@ namespace PersonalFinanceTracker.Controllers
 
         public async Task<IActionResult> Create()
         {
-            TransactionDto transactionDto = new TransactionDto();
+            var transactionDto = new TransactionDto
+            {
+                Date = DateTime.Now
+            };
             var categories = await _transactionRepository.GetAllCategories();
             var types = await _transactionRepository.GetAllTypes();
 
-            return View(new Tuple<TransactionDto, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transactionDto, categories, types));
+            var viewModel = new TransactionCreateViewModel
+            {
+                TransactionDto = transactionDto,
+                Categories = categories,
+                Types = types
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TransactionDto transactionDto)
+        public async Task<IActionResult> Create(TransactionCreateViewModel createViewModel)
         {
             var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var transactionDto = createViewModel.TransactionDto;
 
             if (ModelState.IsValid)
             {
                 var transaction = new Transaction
                 {
                     Category = transactionDto.Category,
-                    Amount = transactionDto.Amount,
+                    Date = new DateTime(
+                        transactionDto.Date.Year,
+                        transactionDto.Date.Month,
+                        transactionDto.Date.Day
+                    ),
                     Description = transactionDto.Description,
-                    Date = transactionDto.Date,
+                    Amount = transactionDto.Amount,
                     Type = transactionDto.Type,
                     UserId = currUserId,
                 };
@@ -143,8 +159,10 @@ namespace PersonalFinanceTracker.Controllers
 
             var categories = await _transactionRepository.GetAllCategories();
             var types = await _transactionRepository.GetAllTypes();
+            createViewModel.Categories = categories;
+            createViewModel.Types = types;
 
-            return View(new Tuple<TransactionDto, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transactionDto, categories, types));
+            return View(createViewModel);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -159,23 +177,30 @@ namespace PersonalFinanceTracker.Controllers
                 return NotFound();
             }
 
-            return View(new Tuple<Transaction, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transaction, categories, types));
+            var viewModel = new TransactionEditViewModel
+            {
+                Transaction = transaction,
+                Categories = categories,
+                Types = types
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Transaction transaction)
+        public async Task<IActionResult> Edit(string id, TransactionEditViewModel editViewModel)
         {
-            var categories = await _transactionRepository.GetAllCategories();
-            var types = await _transactionRepository.GetAllTypes();
+            var transaction = editViewModel.Transaction;
 
             if (id != transaction.Id)
             {
                 return NotFound();
             }
 
+
             if (!ModelState.IsValid)
-                return View(new Tuple<Transaction, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>(transaction, categories, types));
+                return View(editViewModel);
             try
             {
                 _transactionRepository.Update(transaction);

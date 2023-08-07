@@ -27,14 +27,16 @@ namespace PersonalFinanceTracker.Repository
 
         public async Task<IEnumerable<Savings>> GetAll()
         {
-            return await _context.Savings.ToListAsync();
+            return await _context.Savings
+                .OrderByDescending(t => t.Deadline)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Savings>> GetAllByUserId(string userId)
         {
             return await _context.Savings
                 .Where(s => s.UserId == userId)
-                .OrderBy(s => s.Deadline)
+                .OrderByDescending(t => t.Deadline)
                 .ToListAsync();
         }
         public async Task<Savings> GetByIdAsync(string id)

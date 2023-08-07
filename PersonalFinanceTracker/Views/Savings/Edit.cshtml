@@ -1,8 +1,8 @@
-﻿@model Tuple<Savings, IEnumerable<SavingsStatus>>
+﻿@model PersonalFinanceTracker.ViewModels.SavingsEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
-    var status = Model.Item2;
+    var status = Model.Status;
 }
 
 
@@ -11,32 +11,36 @@
 
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Item1.Id" />
+        <input type="hidden" asp-for="Savings.Id" />
+        <input type="hidden" asp-for="Savings.UserId" />
+        <input type="hidden" asp-for="Savings.Date" />
+
         <div class="form-group mb-2">
-            <label asp-for="Item1.UserId" class="control-label"></label>
-            <input asp-for="Item1.UserId" class="form-control"/>
-            <span asp-validation-for="Item1.UserId" class="text-danger"></span>
+            <label asp-for="Savings.Title" class="control-label"></label>
+            <input asp-for="Savings.Title" class="form-control" />
+            <span asp-validation-for="Savings.Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-2">
+            <label asp-for="Savings.TargetAmount" class="control-label"></label>
+            <input asp-for="Savings.TargetAmount" class="form-control"/>
+            <span asp-validation-for="Savings.TargetAmount" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
-            <label asp-for="Item1.TargetAmount" class="control-label"></label>
-            <input asp-for="Item1.TargetAmount" class="form-control"/>
-            <span asp-validation-for="Item1.TargetAmount" class="text-danger"></span>
+            <label asp-for="Savings.CurrentAmount" class="control-label"></label>
+            <input asp-for="Savings.CurrentAmount" class="form-control" />
+            <span asp-validation-for="Savings.CurrentAmount" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
-            <label asp-for="Item1.CurrentAmount" class="control-label"></label>
-            <input asp-for="Item1.CurrentAmount" class="form-control" />
-            <span asp-validation-for="Item1.CurrentAmount" class="text-danger"></span>
-        </div>
-        <div class="form-group mb-2">
-            <label asp-for="Item1.Deadline" class="control-label"></label>
-            <input asp-for="Item1.Deadline" class="form-control" />
-            <span asp-validation-for="Item1.Deadline" class="text-danger"></span>
+            <label asp-for="Savings.Deadline" class="control-label"></label>
+            <input asp-for="Savings.Deadline" type="date" class="form-control" />
+            <span asp-validation-for="Savings.Deadline" class="text-danger"></span>
         </div>
         <div class="dropdown mb-2">
-            <label asp-for="Item1.Status" class="control-label">Category</label>
-            <select asp-for="Item1.Status" asp-items="@(new SelectList(status, "Name", "Name"))" class="dropdown-item rounded-2 px-3 py-2 valid">
+            <label asp-for="Savings.Status" class="control-label">Category</label>
+            <select asp-for="Savings.Status" asp-items="@(new SelectList(status, "Name", "Name"))" class="dropdown-item rounded-2 px-3 py-2 valid">
             </select>
-            <span asp-validation-for="Item1.Status" class="text-danger"></span>
+            <span asp-validation-for="Savings.Status" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
             <input type="submit" value="Save" class="btn"/>

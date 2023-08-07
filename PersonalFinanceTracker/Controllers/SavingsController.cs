@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using PersonalFinanceTracker.Interfaces;
-using PersonalFinanceTracker.Repository;
+using PersonalFinanceTracker.ViewModels;
+using PersonalFinanceTracker.Dtos;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -47,27 +48,53 @@ namespace PersonalFinanceTracker.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var savings = new Savings(); 
+            var savingsDto = new SavingsDto
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now),
+                Deadline = DateOnly.FromDateTime(DateTime.Now),
+            };
             var savingsStatus = await _savingsRepository.GetSavingsStatus();
+            var viewModel = new SavingsCreateViewModel
+            {
+                SavingsDto = savingsDto,
+                Status = savingsStatus
+            };
 
-            return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus));
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")]
-            Savings savings)
+        public async Task<IActionResult> Create(SavingsCreateViewModel createViewModel)
         {
-            IEnumerable<SavingsStatus> savingsStatus = await _savingsRepository.GetSavingsStatus();
+            var savingsDto = createViewModel.SavingsDto;
+            var currUserId = _httpContextAccessor.HttpContext.User.GetUserId();
 
             if (ModelState.IsValid)
             {
+                var savings = new Savings
+                {
+                    UserId = currUserId,
+                    Title = savingsDto.Title,
+                    Date = new DateTime(
+                        savingsDto.Date.Year,
+                        savingsDto.Date.Month,
+                        savingsDto.Date.Day
+                    ).ToUniversalTime(),
+                    TargetAmount = savingsDto.TargetAmount,
+                    CurrentAmount = savingsDto.CurrentAmount,
+                    Deadline = new DateTime(
+                        savingsDto.Deadline.Year,
+                        savingsDto.Deadline.Month,
+                        savingsDto.Deadline.Day
+                    ).ToUniversalTime(),
+                    Status = savingsDto.Status
+                };
                 _savingsRepository.Add(savings);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus)); 
+            return View(createViewModel);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -78,28 +105,53 @@ namespace PersonalFinanceTracker.Controllers
             {
                 return NotFound();
             }
+
             IEnumerable<SavingsStatus> savingsStatus = await _savingsRepository.GetSavingsStatus();
 
-            return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus));
+            var viewModel = new SavingsEditViewModel
+            {
+                Savings = savings,
+                Status = savingsStatus
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id,
-            [Bind("Id,UserId,TargetAmount,CurrentAmount,Deadline,Status")]
-            Savings savings)
+        public async Task<IActionResult> Edit(string id, SavingsEditViewModel editViewModel)
         {
-            IEnumerable<SavingsStatus> savingsStatus = await _savingsRepository.GetSavingsStatus();
+            var savings = editViewModel.Savings;
 
             if (id != savings.Id)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid) return View(new Tuple<Savings, IEnumerable<SavingsStatus>>(savings, savingsStatus));
+            if (!ModelState.IsValid)
+                return View(editViewModel);
             try
             {
-                _savingsRepository.Update(savings);
+                var updatedSavings = new Savings
+                {
+                    Id = savings.Id,
+                    UserId = savings.UserId,
+                    Title = savings.Title,
+                    Date = new DateTime(
+                        savings.Date.Year,
+                        savings.Date.Month,
+                        savings.Date.Day
+                    ).ToUniversalTime(),
+                    TargetAmount = savings.TargetAmount,
+                    CurrentAmount = savings.CurrentAmount,
+                    Deadline = new DateTime(
+                        savings.Deadline.Year,
+                        savings.Deadline.Month,
+                        savings.Deadline.Day
+                    ).ToUniversalTime(),
+                    Status = savings.Status
+                };
+                _savingsRepository.Update(updatedSavings);
             }
             catch (DbUpdateConcurrencyException)
             {

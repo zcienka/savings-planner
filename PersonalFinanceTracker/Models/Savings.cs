@@ -12,6 +12,7 @@ namespace PersonalFinanceTracker.Models
         public decimal TargetAmount { get; set; }
         [Display(Name = "Current Amount")]
         public decimal CurrentAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Deadline { get; set; }
         public string Status { get; set; }
     }

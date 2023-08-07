@@ -1,9 +1,9 @@
-﻿@model Tuple<PersonalFinanceTracker.Dtos.TransactionDto, IEnumerable<TransactionCategory>, IEnumerable<TransactionType>>
+﻿@model PersonalFinanceTracker.ViewModels.TransactionCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
-    var categories = Model.Item2;
-    var types = Model.Item3;
+    var categories = Model.Categories;
+    var types = Model.Types;
 }
 
 
@@ -17,34 +17,34 @@
         @*     <input asp-for="Id" class="form-control"/> *@
         @*     <span asp-validation-for="Id" class="text-danger"></span> *@
         @* </div> *@
-        <div class="dropdown mb-2">
-            <label asp-for="Item1.Category" class="control-label">Category</label>
-            <select asp-for="Item1.Category" asp-items="@(new SelectList(categories, "Name", "Name"))" class="dropdown-item rounded-2 px-3 py-2 valid">
+        <div class="form-group dropdown mb-2">
+            <label asp-for="TransactionDto.Category" class="control-label">Category</label>
+            <select asp-for="TransactionDto.Category" asp-items="@(new SelectList(categories, "Name", "Name"))" class="form-control dropdown-item rounded-2 px-3 py-2">
             </select>
-            <span asp-validation-for="Item1.Category" class="text-danger"></span>
+            <span asp-validation-for="TransactionDto.Category" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Item1.Date" class="control-label"></label>
-            <input asp-for="Item1.Date" type="datetime-local" class="form-control" />
-            <span asp-validation-for="Item1.Date" class="text-danger"></span>
+            <label asp-for="TransactionDto.Date" class="control-label"></label>
+            <input type="date" asp-for="TransactionDto.Date" class="form-control"/>
+            <span asp-validation-for="TransactionDto.Date" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Item1.Description" class="control-label"></label>
-            <textarea asp-for="Item1.Description" class="form-control" cols="40" rows="5"></textarea>
-            <span asp-validation-for="Item1.Description" class="text-danger"></span>
+            <label asp-for="TransactionDto.Description" class="control-label"></label>
+            <textarea asp-for="TransactionDto.Description" class="form-control" cols="40" rows="5" required></textarea>
+            <span asp-validation-for="TransactionDto.Description" class="text-danger"></span>
         </div>
-        <div class="dropdown mb-2">
-            <label asp-for="Item1.Type" class="control-label">Type</label>
-            <select asp-for="Item1.Type" asp-items="@(new SelectList(types, "Name", "Name"))" class="dropdown-item rounded-2 px-3 py-2 valid">
+        <div class="form-group dropdown mb-2">
+            <label asp-for="TransactionDto.Type" class="control-label">Type</label>
+            <select asp-for="TransactionDto.Type" asp-items="@(new SelectList(types, "Name", "Name"))" class="form-control dropdown-item rounded-2 px-3 py-2">
             </select>
-            <span asp-validation-for="Item1.Type" class="text-danger"></span>
+            <span asp-validation-for="TransactionDto.Type" class="text-danger"></span>
         </div>
         <div class="form-group mb-2">
-            <label asp-for="Item1.Amount" class="control-label"></label>
-            <input asp-for="Item1.Amount" class="form-control" />
-            <span asp-validation-for="Item1.Amount" class="text-danger"></span>
+            <label asp-for="TransactionDto.Amount" class="control-label"></label>
+            <input asp-for="TransactionDto.Amount" class="form-control"/>
+            <span asp-validation-for="TransactionDto.Amount" class="text-danger"></span>
         </div>
-        <div class="form-group mb-2">
+        <div class="mb-2">
             <input type="submit" value="Create" class="btn"/>
         </div>
     </form>

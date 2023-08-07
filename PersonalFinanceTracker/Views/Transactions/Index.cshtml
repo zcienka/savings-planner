@@ -4,7 +4,6 @@
     ViewData["Title"] = "Transactions";
 
     var transactions = Model.Item1;
-    var categories = Model.Item2;
 
     Pager pager = new Pager();
 
@@ -13,9 +12,6 @@
         pager = ViewBag.Pager;
     }
 
-    if (ViewBag.Categories != null)
-    {
-    }
 }
 <script>
     function filterTransactions(categoryName) {
