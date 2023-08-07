@@ -1,11 +1,21 @@
 # SavingsPlanner
 An application designed to help users manage and track their personal finances.
 
+## Main page
 <div style="text-align: center;">
   <img src="./res/main-page.png" alt="Main page">
 </div>
+
+## User page
+
 <div style="text-align: center;">
   <img src="./res/transactions-page.png" alt="Main page">
+</div>
+
+## Admin panel
+
+<div style="text-align: center;">
+  <img src="./res/admin-panel.png" alt="Admin panel">
 </div>
 
 ## Features
@@ -28,7 +38,13 @@ An application designed to help users manage and track their personal finances.
 ## Getting Started
 To run the application locally, you will need to have Docker installed on your machine. 
 
-To start the application run the following commands:
+To start the application create a `.env` file based on the provided example:
+```
+CONNECTION_STRING=IntegratedSecurity=true;Pooling=true;Server=db;Database=financetracker;Port=5432;User Id=postgres;Password=postgres;Include Error Detail=true;
+PASSWORD=
+
+```
+Run the following commands:
 
 ```
 docker-compose build
